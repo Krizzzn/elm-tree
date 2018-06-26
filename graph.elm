@@ -16,6 +16,11 @@ type GraphPath
         }
 
 
+filterNodes : Graph -> String -> List Node
+filterNodes graph id =
+    List.filter (\n -> String.startsWith id n.id) graph.nodes
+
+
 reverseGraph : Graph -> Graph
 reverseGraph graph =
     { nodes = graph.nodes

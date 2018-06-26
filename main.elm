@@ -6,6 +6,7 @@ module Main exposing (..)
 
 import Html exposing (Html)
 import Html exposing (..)
+import Html.Events as HEvent exposing (..)
 import Html.Attributes as HAttr exposing (..)
 import Time exposing (Time, second)
 import List exposing (..)
@@ -28,16 +29,25 @@ main =
 
 
 type alias Model =
-    Graph
+    { graph : Graph
+    , currentPath : Graph
+    , currentFocus : String
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
     let
-        default : Graph
-        default =
+        defaultgraph =
             { nodes = projects
             , edges = connections
+            }
+
+        default : Model
+        default =
+            { graph = defaultgraph
+            , currentPath = Graph.filterGraph defaultgraph "NC1"
+            , currentFocus = "VISION"
             }
     in
         ( default, Cmd.none )
@@ -49,6 +59,7 @@ init =
 
 type Msg
     = Tick Time
+    | ChangeSelection String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -56,6 +67,13 @@ update msg model =
     case msg of
         Tick newTime ->
             ( model, Cmd.none )
+
+        ChangeSelection newSelection ->
+            let
+                newModel =
+                    { model | currentFocus = newSelection, currentPath = Graph.filterGraph model.graph newSelection }
+            in
+                ( newModel, Cmd.none )
 
 
 
@@ -76,43 +94,29 @@ view model =
     let
         node =
             Maybe.withDefault { id = "NC1", name = "?" } <|
-                findNodeById model "NC1"
+                findNodeById model.currentPath "NC1"
 
-        bgg =
-            Graph.filterGraph model "NC5"
-
-        flippedFilter =
-            flip Graph.filterGraph
-
-        ggg =
-            Graph.reverseGraph model
-                |> flippedFilter "VISION"
-
-        bff =
-            List.map (\a -> a.id) bgg.nodes
-                |> Debug.log "debug 70:"
-
-        path : GraphPath
-        path =
-            pathify model node
+        options =
+            Graph.filterNodes model.graph "NC"
     in
         div []
             [ Html.h1 [] [ text "The Graph" ]
-            , renderPath path
+            , select [ HEvent.onInput ChangeSelection ] <|
+                List.map
+                    (\n -> option [ value n.id ] [ text ("[" ++ n.id ++ "] " ++ n.name) ])
+                    options
+            , renderPath model.currentPath
             ]
 
 
-renderPath : GraphPath -> Html msg
-renderPath path =
-    let
-        (GraphPath graphPath) =
-            path
-    in
-        div [ HAttr.style [ ( "marginLeft", "10px" ) ] ]
-            [ text (graphPath.node.name ++ "(" ++ graphPath.node.id ++ ")")
-            , SvgGraph.render ( "500", "250" )
-            , div [] <| List.map renderPath graphPath.sub
-            ]
+renderPath : Graph -> Html msg
+renderPath graph =
+    div [ HAttr.style [ ( "marginLeft", "10px" ) ] ]
+        [ text "9837"
+        , SvgGraph.render ( "800", "350" ) graph
+
+        -- , div [] <| List.map renderPath graphPath.sub
+        ]
 
 
 render : List Node -> String
