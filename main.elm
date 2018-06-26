@@ -22,26 +22,6 @@ main =
 
 -- MODEL
 
-type alias Node =
-  { id : String
-  , name : String
-  }
-
-type alias Edge =
-  { from : String
-  , to : String
-  }
-
-type alias Graph =
-  {  nodes : List Node
-  ,  edges : List Edge
-  }
-
-type GraphPath = GraphPath
-  { node : Node
-  , sub  : List GraphPath
-  }
-
 type alias Model = Graph
 
 
@@ -57,20 +37,7 @@ init =
     
   (default, Cmd.none)
 
-makeNode : (String, String) -> Node
-makeNode nodeTuple = 
-  {  id = Tuple.first nodeTuple
-  ,  name = Tuple.second nodeTuple
-  }
-
-makeEdge : (String, String) -> Edge
-makeEdge edgeTuple = 
-  {  from = Tuple.first edgeTuple
-  ,  to = Tuple.second edgeTuple
-  }
-
 -- UPDATE
-
 
 type Msg
   = Tick Time
@@ -81,8 +48,6 @@ update msg model =
   case msg of
     Tick newTime ->
       (model, Cmd.none)
-
-
 
 -- SUBSCRIPTIONS
 
@@ -98,64 +63,25 @@ view : Model -> Html Msg
 view model =
   let
     node = Maybe.withDefault { id = "NC1", name = "?" } <| 
-      findNodeById model "NC36"
+      findNodeById model "NC1"
 
+    bgg = Graph.filterGraph model "NC5"
+    bff = List.map (\a -> a.id) bgg.nodes |> 
+      Debug.log "debug 70:" 
+
+
+    
+  
     path : GraphPath
     path = pathify model node
   in
-      
+
     div [] [
         renderPath path
       , svg [ SAttr.width "500", SAttr.height "500", SAttr.viewBox "0 0 500 500" ] [ 
           rect [ SAttr.x "10", SAttr.y "10", SAttr.width "100", SAttr.height "100", SAttr.rx "15", SAttr.ry "15" ] [] 
         ]
       ]
-
-pathify : Graph -> Node -> GraphPath
-pathify graph node =
-  let
-    findNodesFromGraph = findNodesByEdge graph
-    pathifyGraph = pathify graph
-  in
-
-  GraphPath 
-    { node = node
-    , sub = findEdgesByNode graph node |> 
-            List.concatMap findNodesFromGraph |> 
-            List.map pathifyGraph
-  } 
-
-findNodeById : Graph -> String -> Maybe Node
-findNodeById graph id =
-  findNodesById graph id |>
-    List.head
-
-findNodesById : Graph -> String -> List Node
-findNodesById graph id =
-  List.filter (\n -> n.id == id) graph.nodes
-
-findNodesByEdge : Graph -> Edge -> List Node
-findNodesByEdge graph edge =
-  let
-    edgeConnectsTo = connectsTo edge
-  in
-    List.filter edgeConnectsTo graph.nodes
-
-findEdgesByNode : Graph -> Node -> List Edge
-findEdgesByNode graph node =
-  let
-    nodeConnectsFrom : Edge -> Bool
-    nodeConnectsFrom = connectsFrom node
-  in
-    List.filter nodeConnectsFrom graph.edges      
-
-connectsTo : Edge -> Node -> Bool
-connectsTo edge node =
-  edge.to == node.id
-
-connectsFrom : Node -> Edge -> Bool 
-connectsFrom node edge =
-  edge.from == node.id
 
 renderPath : GraphPath -> Html msg
 renderPath path =

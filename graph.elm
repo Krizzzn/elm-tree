@@ -1,14 +1,6 @@
 module Graph exposing (..)
 
-type alias Node =
-  { id : String
-  , name : String
-  }
-
-type alias Edge =
-  { from : String
-  , to : String
-  }
+import StaticData exposing (..)
 
 type alias Graph =
   {  nodes : List Node
@@ -19,6 +11,45 @@ type GraphPath = GraphPath
   { node : Node
   , sub  : List GraphPath
   }
+
+
+filterGraph : Graph -> String -> Graph 
+filterGraph graph id = 
+  let
+    ids =
+      findIdsToBottom graph [id]    
+  in
+    {
+      nodes = List.filter (\n -> List.member n.id ids ) graph.nodes
+    , edges = List.filter (\n -> List.member n.from ids ) graph.edges
+  }
+
+findIdsToBottom : Graph -> List String -> List String
+findIdsToBottom graph ids =
+  let
+    found = 
+      List.filter (\e -> List.member e.from ids) graph.edges |>
+        List.map (\e -> e.to)
+
+    bottom = "VISION"
+
+    bottomReached = List.member bottom found
+  in
+    if bottomReached then 
+      List.append ids found
+    else
+      findIdsToBottom graph found |> List.append ids
+
+
+dddrr : List String -> String -> List String -> Bool
+dddrr list needle =
+  List.any (\a -> a == needle ) 
+
+
+ddd : List String -> String -> List String -> Bool
+ddd list needle =
+  List.any (\a -> a == needle ) 
+
 
 pathify : Graph -> Node -> GraphPath
 pathify graph node =
