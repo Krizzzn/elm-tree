@@ -7,12 +7,11 @@ module Main exposing (..)
 import Html exposing (Html)
 import Html exposing (..)
 import Html.Attributes as HAttr exposing (..)
-import Svg exposing (svg, rect)
-import Svg.Attributes as SAttr exposing (..)
 import Time exposing (Time, second)
 import List exposing (..)
 import StaticData exposing (..)
 import Graph exposing (..)
+import SvgGraph exposing (..)
 
 
 main =
@@ -82,6 +81,13 @@ view model =
         bgg =
             Graph.filterGraph model "NC5"
 
+        flippedFilter =
+            flip Graph.filterGraph
+
+        ggg =
+            Graph.reverseGraph model
+                |> flippedFilter "VISION"
+
         bff =
             List.map (\a -> a.id) bgg.nodes
                 |> Debug.log "debug 70:"
@@ -91,10 +97,8 @@ view model =
             pathify model node
     in
         div []
-            [ renderPath path
-            , svg [ SAttr.width "500", SAttr.height "500", SAttr.viewBox "0 0 500 500" ]
-                [ rect [ SAttr.x "10", SAttr.y "10", SAttr.width "100", SAttr.height "100", SAttr.rx "15", SAttr.ry "15" ] []
-                ]
+            [ Html.h1 [] [ text "The Graph" ]
+            , renderPath path
             ]
 
 
@@ -106,6 +110,7 @@ renderPath path =
     in
         div [ HAttr.style [ ( "marginLeft", "10px" ) ] ]
             [ text (graphPath.node.name ++ "(" ++ graphPath.node.id ++ ")")
+            , SvgGraph.render ( "500", "250" )
             , div [] <| List.map renderPath graphPath.sub
             ]
 

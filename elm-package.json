@@ -5,7 +5,8 @@
     "license": "BSD3",
     "source-directories": [
         ".",
-        "./data"
+        "./data",
+        "./render"
     ],
     "exposed-modules": [],
     "dependencies": {

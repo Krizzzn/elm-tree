@@ -16,44 +16,52 @@ type GraphPath
         }
 
 
+reverseGraph : Graph -> Graph
+reverseGraph graph =
+    { nodes = graph.nodes
+    , edges = List.map reverseNode graph.edges
+    }
+
+
+reverseNode : Edge -> Edge
+reverseNode edge =
+    { from = edge.to
+    , to = edge.from
+    }
+
+
 filterGraph : Graph -> String -> Graph
 filterGraph graph id =
     let
         ids =
-            findIdsToBottom graph [ id ]
+            vistGraph graph [ id ]
     in
         { nodes = List.filter (\n -> List.member n.id ids) graph.nodes
         , edges = List.filter (\n -> List.member n.from ids) graph.edges
         }
 
 
-findIdsToBottom : Graph -> List String -> List String
-findIdsToBottom graph ids =
+vistGraph : Graph -> List String -> List String
+vistGraph graph ids =
     let
+        filterToNewIds =
+            filterNewIds ids
+
         found =
             List.filter (\e -> List.member e.from ids) graph.edges
                 |> List.map (\e -> e.to)
-
-        bottom =
-            "VISION"
-
-        bottomReached =
-            List.member bottom found
+                |> filterToNewIds
     in
-        if bottomReached then
+        if List.length found == 0 then
             List.append ids found
         else
-            findIdsToBottom graph found |> List.append ids
+            List.append ids found
+                |> vistGraph graph
 
 
-dddrr : List String -> String -> List String -> Bool
-dddrr list needle =
-    List.any (\a -> a == needle)
-
-
-ddd : List String -> String -> List String -> Bool
-ddd list needle =
-    List.any (\a -> a == needle)
+filterNewIds : List String -> List String -> List String
+filterNewIds list1 list2 =
+    List.filter (\e -> not <| List.member e list1) list2
 
 
 pathify : Graph -> Node -> GraphPath
@@ -67,10 +75,11 @@ pathify graph node =
     in
         GraphPath
             { node = node
-            , sub =
-                findEdgesByNode graph node
-                    |> List.concatMap findNodesFromGraph
-                    |> List.map pathifyGraph
+            , sub = []
+
+            --findEdgesByNode graph node
+            --    |> List.concatMap findNodesFromGraph
+            --    |> List.map pathifyGraph
             }
 
 
