@@ -13,6 +13,7 @@ import List exposing (..)
 import StaticData exposing (..)
 import Graph exposing (..)
 import SvgGraph exposing (..)
+import JsGraph exposing (..)
 
 
 main =
@@ -50,7 +51,7 @@ init =
             , currentFocus = "VISION"
             }
     in
-        ( default, Cmd.none )
+        ( default, JsGraph.tree default.currentPath )
 
 
 
@@ -73,7 +74,7 @@ update msg model =
                 newModel =
                     { model | currentFocus = newSelection, currentPath = Graph.filterGraph model.graph newSelection }
             in
-                ( newModel, Cmd.none )
+                ( newModel, JsGraph.tree newModel.currentPath )
 
 
 

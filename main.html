@@ -1,0 +1,126 @@
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>~/main.elm</title>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css">
+        <style type="text/css">@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+            html, head, body {
+                margin: 0;
+                height: 100%;
+            }
+        </style>
+    </head>
+<body>
+    <div id="mynetwork" style="width:900px; height: 900px"> </div>
+</body>
+<script src="/_compile/main.elm" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+<script>
+
+    var app = runElmProgram()
+
+    app.ports.tree.subscribe(function(tree) {
+        window.console.log("-->", tree.edges);
+        //alert(tree.nodes);
+
+
+
+
+for (var i = tree.nodes.length - 1; i >= 0; i--) {
+    var node = tree.nodes[i];
+    node.label = node.name;
+    node.margin = 5;
+
+    node.fixed = {y: true};
+
+    if (node.id.match(/NC/)){
+  //      node.y = 600;
+        node.fixed.x = true;
+    }
+  //  if (node.id.match(/CSF/))
+  //      node.y = 400;
+//    if (node.id.match(/SO/))
+  //      node.y = 200;
+    if (node.id.match(/VISION/)){
+       // node.y = 0;
+        node.fixed.x = true;
+    }
+}
+
+// for (var i = tree.edges.length - 1; i >= 0; i--) {
+//     var edge = tree.edges[i]
+
+//     d[edge.from].parent = d[edge.from].parent || [];
+//     d[edge.from].parent.push(d[edge.to]);
+// }
+
+
+
+  // create an array with nodes
+  var nodes = new vis.DataSet(tree.nodes);
+
+  // create an array with edges
+  var edges = new vis.DataSet(tree.edges);
+
+  // create a network
+  var container = document.getElementById('mynetwork');
+  var data = {
+    nodes: nodes,
+    edges: edges
+  };
+var options = {
+    interaction: {
+        selectable: false,
+        dragNodes: false,
+        dragView: false
+    },
+    edges: {
+      font: {
+        size: 12
+      },
+      // widthConstraint: {
+      //   maximum: 90
+      // }
+    },
+    nodes: {
+      shape: 'box',
+      margin: 5,
+      widthConstraint: {
+        maximum: 200
+      }
+    },
+    physics: {
+      enabled: true
+       ,     hierarchicalRepulsion: {
+        nodeDistance: 190
+      }
+    },
+    layout: {
+  hierarchical: {
+    enabled: true,
+    //nodeSpacing: 600,
+    //nodeDistance: 600,
+    levelSeparation:150,
+    blockShifting: true,
+    edgeMinimization: false,
+    direction: "DU",
+    sortMethod: "directed"
+  }
+}
+  };
+  var network = new vis.Network(container, data, options);
+
+
+
+
+
+
+
+
+
+        //app.ports.suggestions.send(suggestions);
+    });
+</script>
+</html>
