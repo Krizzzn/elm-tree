@@ -16,11 +16,6 @@ type GraphPath
         }
 
 
-filterNodes : Graph -> String -> List Node
-filterNodes graph id =
-    List.filter (\n -> String.startsWith id n.id) graph.nodes
-
-
 reverseGraph : Graph -> Graph
 reverseGraph graph =
     { nodes = graph.nodes
@@ -96,7 +91,7 @@ findNodeById graph id =
 
 findNodesById : Graph -> String -> List Node
 findNodesById graph id =
-    List.filter (\n -> n.id == id) graph.nodes
+    List.filter (\n -> String.startsWith id n.id) graph.nodes
 
 
 findNodesByEdge : Graph -> Edge -> List Node

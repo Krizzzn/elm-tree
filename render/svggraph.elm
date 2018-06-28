@@ -83,7 +83,7 @@ renderEdges edges =
 
 renderEdge : GraphEdge -> Svg.Svg msg
 renderEdge edge =
-    Svg.line [ x1 (toString ((Tuple.first edge.positionFrom) * 70 + 20)), y1 (toString ((Tuple.second edge.positionFrom) * 70 + 3)), strokeWidth "1", x2 (toString ((Tuple.first edge.positionTo) * 70 + 20)), y2 (toString ((Tuple.second edge.positionTo) * 70 - 14)), stroke "gray" ] []
+    Svg.line [ x1 (toString ((Tuple.first edge.positionFrom) * 70 + 0)), y1 (toString ((Tuple.second edge.positionFrom) * 70 + 5)), strokeWidth "1", x2 (toString ((Tuple.first edge.positionTo) * 70 + 0)), y2 (toString ((Tuple.second edge.positionTo) * 70 - 5)), stroke "gray" ] []
 
 
 renderNodes : List GraphNode -> List (Svg.Svg msg)
@@ -93,10 +93,9 @@ renderNodes graph =
 
 renderNode : GraphNode -> Svg.Svg msg
 renderNode node =
-    Svg.text_ [ SAttr.fontSize "6", SAttr.x (toString ((Tuple.first node.position) * 70)), SAttr.y (toString ((Tuple.second node.position) * 70)) ]
+    Svg.circle [ SAttr.cx (toString ((Tuple.first node.position) * 70)), SAttr.cy (toString ((Tuple.second node.position) * 70)), SAttr.r "5" ]
         [ Svg.title []
             [ Svg.text node.node.name ]
-        , Svg.text node.node.name
         ]
 
 
@@ -109,7 +108,7 @@ splitList : Graph -> List (List Node)
 splitList graph =
     distinctNodesTypes graph
         |> Set.toList
-        |> List.map (\s -> Graph.filterNodes graph s)
+        |> List.map (\s -> Graph.findNodesById graph s)
 
 
 distinctNodesTypes : Graph -> Set String

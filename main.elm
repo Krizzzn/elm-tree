@@ -98,7 +98,7 @@ view model =
                 findNodeById model.currentPath "NC1"
 
         options =
-            Graph.filterNodes model.graph "NC"
+            Graph.findNodesById model.graph "NC"
     in
         div []
             [ Html.h1 [] [ text "The Graph" ]
