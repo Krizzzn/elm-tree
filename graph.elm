@@ -34,7 +34,7 @@ filterGraph : Graph -> String -> Graph
 filterGraph graph id =
     let
         ids =
-            vistGraph graph [ id ]
+            vistGraph graph [ id ] ++ vistGraph (reverseGraph graph) [ id ]
     in
         { nodes = List.filter (\n -> List.member n.id ids) graph.nodes
         , edges = List.filter (\n -> List.member n.from ids) graph.edges
