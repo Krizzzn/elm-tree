@@ -13,22 +13,33 @@
         </style>
     </head>
 <body>
-    <div id="mynetwork" style="width:900px; height: 650px; border: 1px solid black"> </div>
+    <div id="mynetwork" style="width:90%; height: 650px; border: 1px solid black"> </div>
 </body>
 <script src="/_compile/main.elm" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
 <script>
 
-    var app = runElmProgram()
+var app;
+if (Elm)
+  app = Elm.Main.fullscreen();
+else
+  app = runElmProgram();
 
-    app.ports.tree.subscribe(function(tree) {
-        window.console.log("-->", tree.edges);
-        //alert(tree.nodes);
+app.ports.tree.subscribe(function(tree) {
+
+  var colors = {
+    blue: '#0083BF',
+    purple: '#7F3F98',
+    green: '#00A886',
+    pink: '#EE2375',
+    orange: '#FAA21B',
+    coolgray06: '#ABA7A7',
+    coolgray09: '#78777A',
+    coolgray11: '#55565A'
+  };
 
 
-
-
-for (var i = tree.nodes.length - 1; i >= 0; i--) {
+  for (var i = tree.nodes.length - 1; i >= 0; i--) {
     var node = tree.nodes[i];
     node.label = node.name;
     node.margin = 5;
@@ -36,27 +47,17 @@ for (var i = tree.nodes.length - 1; i >= 0; i--) {
     node.fixed = {y: true};
 
     if (node.id.match(/NC/)){
-  //      node.y = 600;
-        node.fixed.x = true;
+      node.color = colors.coolgray11;
     }
-  //  if (node.id.match(/CSF/))
-  //      node.y = 400;
-//    if (node.id.match(/SO/))
-  //      node.y = 200;
+    if (node.id.match(/CSF/))
+      node.color = colors.coolgray09;
+    if (node.id.match(/SO/))
+      node.color = colors.coolgray06;
     if (node.id.match(/VISION/)){
-       // node.y = 0;
-        node.fixed.x = true;
-    }
-}
-
-// for (var i = tree.edges.length - 1; i >= 0; i--) {
-//     var edge = tree.edges[i]
-
-//     d[edge.from].parent = d[edge.from].parent || [];
-//     d[edge.from].parent.push(d[edge.to]);
-// }
-
-
+     node.mass = 100,
+     node.color = colors.blue
+   }
+ }
 
   // create an array with nodes
   var nodes = new vis.DataSet(tree.nodes);
@@ -70,36 +71,49 @@ for (var i = tree.nodes.length - 1; i >= 0; i--) {
     nodes: nodes,
     edges: edges
   };
-var options = {
+
+  var shadow = {
+    enabled: true,
+    size: 7,
+    x: 0,
+    y: 3
+  };
+
+  var zoomable = true;
+
+  var options = {
     interaction: {
-        selectable: false,
-        dragNodes: false,
-        dragView: false
+      selectable: zoomable,
+      dragNodes: false,
+      dragView: zoomable,
+      zoomView: zoomable
     },
     edges: {
       font: {
         size: 12
       },
-      // widthConstraint: {
-      //   maximum: 90
-      // }
+      width: 3
     },
     nodes: {
       shape: 'box',
       margin: 5,
+      color: '#7BE141',
+      borderWidth: 0,
+      shadow: shadow,
       widthConstraint: {
         maximum: 200
       }
     },
+
     physics: {
       enabled: true
-       ,     hierarchicalRepulsion: {
-        nodeDistance: 190
+      ,     hierarchicalRepulsion: {
+        nodeDistance: 220
       }
     },
     layout: {
-  hierarchical: {
-    enabled: true,
+      hierarchical: {
+        enabled: true,
     //nodeSpacing: 600,
     //nodeDistance: 600,
     levelSeparation:150,
@@ -109,18 +123,17 @@ var options = {
     sortMethod: "directed"
   }
 }
-  };
-  var network = new vis.Network(container, data, options);
+};
 
+var network = new vis.Network(container, data, options);
 
+network.on("doubleClick", function(e){
+  if (e.nodes.length > 0)
+    app.ports.selectNode.send(e.nodes[0]);
+  else
+    app.ports.selectNode.send("VISION");
+});
 
-
-
-
-
-
-
-        //app.ports.suggestions.send(suggestions);
-    });
+});
 </script>
 </html>

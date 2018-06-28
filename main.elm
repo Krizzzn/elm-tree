@@ -51,7 +51,7 @@ init =
             , currentFocus = "VISION"
             }
     in
-        ( default, JsGraph.tree default.currentPath )
+        ( default, JsGraph.tree defaultgraph )
 
 
 
@@ -83,7 +83,7 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    JsGraph.selectNode ChangeSelection
 
 
 
@@ -98,7 +98,7 @@ view model =
                 findNodeById model.currentPath "NC1"
 
         options =
-            Graph.findNodesById model.graph "NC"
+            model.graph.nodes
     in
         div []
             [ Html.h1 [] [ text "The Graph" ]
