@@ -15,6 +15,7 @@ import Graph exposing (..)
 import SvgGraph exposing (..)
 import JsGraph exposing (..)
 import Navigation
+import Markdown
 
 
 main =
@@ -91,7 +92,7 @@ update msg model =
                         String.dropLeft 1 location.hash
 
                 newModel =
-                    { model | location = location, currentPath = Graph.filterGraph model.graph newSelection }
+                    { model | location = location, currentPath = Graph.filterGraph model.graph newSelection, showDescription = Maybe.Nothing }
             in
                 ( newModel, JsGraph.tree newModel.currentPath )
 
@@ -140,19 +141,44 @@ view model =
                     ]
                 ]
                 []
-            , renderLongdescription model.showDescription
+            , renderLongdescription model.graph model.showDescription
+
+            --, select [ HEvent.onInput ChangeSelection ] <|
+            --    List.map
+            --        (\n -> option [ value n.id ] [ text ("[" ++ n.id ++ "] " ++ n.name) ])
+            --        options
+            --, renderPath model.currentPath
             ]
 
 
-renderLongdescription : Maybe String -> Html msg
-renderLongdescription nodeId =
-    case nodeId of
+renderLongdescription : Graph -> Maybe String -> Html msg
+renderLongdescription graph maybeNodeId =
+    case maybeNodeId of
         Maybe.Nothing ->
             Html.text ""
 
         Maybe.Just node ->
-            div [] [ Html.text node ]
+            Graph.findNodeById graph node
+                |> renderLongdescriptionOfNode
 
+
+renderLongdescriptionOfNode : Maybe Node -> Html msg
+renderLongdescriptionOfNode maybeNode =
+    case maybeNode of
+        Maybe.Nothing ->
+            Html.text ""
+
+        Maybe.Just node ->
+            div [] [ Markdown.toHtml [ class "content" ] (renderNodeAsMarkdown node) ]
+
+
+renderNodeAsMarkdown : Node -> String
+renderNodeAsMarkdown node =
+    "# [" ++ node.id ++ "] " ++ node.name ++ "\x0D\n" ++ node.description
+
+
+
+-- body
 
 
 renderPath : Graph -> Html msg

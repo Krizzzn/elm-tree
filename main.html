@@ -139,11 +139,12 @@ network.on("doubleClick", function(e){
 network.on("click", function(e){
     window.clearTimeout(timeout);
 
-    if (e.nodes.length == 0)
-        return;
+    var nodeId = "---";
+    if (e.nodes.length > 0)
+        nodeId = e.nodes[0];
 
     timeout = window.setTimeout(function(){
-        app.ports.showNode.send(e.nodes[0]);
+        app.ports.showNode.send(nodeId);
     }, 400);
 });
 
