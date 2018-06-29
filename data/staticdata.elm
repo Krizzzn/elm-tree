@@ -4,6 +4,7 @@ module StaticData exposing (projects, connections, Node, Edge)
 type alias Node =
     { id : String
     , name : String
+    , description : String
     }
 
 
@@ -15,77 +16,77 @@ type alias Edge =
 
 projects : List Node
 projects =
-    [ { id = "NC1", name = "???" }
-    , { id = "NC2", name = "???" }
-    , { id = "NC3", name = "???" }
-    , { id = "NC4", name = "???" }
-    , { id = "NC5", name = "???" }
-    , { id = "NC6", name = "???" }
-    , { id = "NC7", name = "???" }
-    , { id = "NC8", name = "???" }
-    , { id = "NC9", name = "???" }
-    , { id = "NC10", name = "???" }
-    , { id = "NC11", name = "???" }
-    , { id = "NC12", name = "???" }
-    , { id = "NC13", name = "???" }
-    , { id = "NC14", name = "???" }
-    , { id = "NC15", name = "???" }
-    , { id = "NC16", name = "???" }
-    , { id = "NC17", name = "???" }
-    , { id = "NC18", name = "???" }
-    , { id = "NC19", name = "???" }
-    , { id = "NC20", name = "???" }
-    , { id = "NC23", name = "???" }
-    , { id = "NC24", name = "???" }
-    , { id = "NC25", name = "???" }
-    , { id = "NC26", name = "???" }
-    , { id = "NC27", name = "???" }
-    , { id = "NC28", name = "???" }
-    , { id = "NC29", name = "???" }
-    , { id = "NC30", name = "???" }
-    , { id = "NC31", name = "???" }
-    , { id = "NC32", name = "???" }
-    , { id = "NC33", name = "???" }
-    , { id = "NC35", name = "???" }
-    , { id = "NC36", name = "???" }
-    , { id = "NC37", name = "???" }
-    , { id = "NC38", name = "???" }
-    , { id = "NC39", name = "???" }
-    , { id = "NC40", name = "???" }
-    , { id = "NC41", name = "???" }
-    , { id = "NC42", name = "???" }
-    , { id = "NC43", name = "???" }
-    , { id = "CSF1", name = "???" }
-    , { id = "CSF2", name = "???" }
-    , { id = "CSF3", name = "???" }
-    , { id = "CSF4", name = "???" }
-    , { id = "CSF5", name = "???" }
-    , { id = "CSF6", name = "???" }
-    , { id = "CSF7", name = "???" }
-    , { id = "CSF8", name = "???" }
-    , { id = "CSF9", name = "???" }
-    , { id = "CSF10", name = "???" }
-    , { id = "CSF11", name = "???" }
-    , { id = "CSF12", name = "???" }
-    , { id = "CSF13", name = "???" }
-    , { id = "CSF14", name = "???" }
-    , { id = "CSF15", name = "???" }
-    , { id = "CSF16", name = "???" }
-    , { id = "CSF17", name = "???" }
-    , { id = "CSF18", name = "???" }
-    , { id = "CSF19", name = "???" }
-    , { id = "CSF20", name = "???" }
-    , { id = "CSF21", name = "???" }
-    , { id = "CSF22", name = "???" }
-    , { id = "CSF23", name = "???" }
-    , { id = "CSF24", name = "???" }
-    , { id = "SO1", name = "???" }
-    , { id = "SO2", name = "???" }
-    , { id = "SO3", name = "???" }
-    , { id = "SO4", name = "???" }
-    , { id = "SO5", name = "???" }
-    , { id = "SO6", name = "???" }
-    , { id = "VISION", name = "???" }
+    [ { id = "NC1", name = "???", description = "mysterious node" }
+    , { id = "NC2", name = "???", description = "mysterious node" }
+    , { id = "NC3", name = "???", description = "mysterious node" }
+    , { id = "NC4", name = "???", description = "mysterious node" }
+    , { id = "NC5", name = "???", description = "mysterious node" }
+    , { id = "NC6", name = "???", description = "mysterious node" }
+    , { id = "NC7", name = "???", description = "mysterious node" }
+    , { id = "NC8", name = "???", description = "mysterious node" }
+    , { id = "NC9", name = "???", description = "mysterious node" }
+    , { id = "NC10", name = "???", description = "mysterious node" }
+    , { id = "NC11", name = "???", description = "mysterious node" }
+    , { id = "NC12", name = "???", description = "mysterious node" }
+    , { id = "NC13", name = "???", description = "mysterious node" }
+    , { id = "NC14", name = "???", description = "mysterious node" }
+    , { id = "NC15", name = "???", description = "mysterious node" }
+    , { id = "NC16", name = "???", description = "mysterious node" }
+    , { id = "NC17", name = "???", description = "mysterious node" }
+    , { id = "NC18", name = "???", description = "mysterious node" }
+    , { id = "NC19", name = "???", description = "mysterious node" }
+    , { id = "NC20", name = "???", description = "mysterious node" }
+    , { id = "NC23", name = "???", description = "mysterious node" }
+    , { id = "NC24", name = "???", description = "mysterious node" }
+    , { id = "NC25", name = "???", description = "mysterious node" }
+    , { id = "NC26", name = "???", description = "mysterious node" }
+    , { id = "NC27", name = "???", description = "mysterious node" }
+    , { id = "NC28", name = "???", description = "mysterious node" }
+    , { id = "NC29", name = "???", description = "mysterious node" }
+    , { id = "NC30", name = "???", description = "mysterious node" }
+    , { id = "NC31", name = "???", description = "mysterious node" }
+    , { id = "NC32", name = "???", description = "mysterious node" }
+    , { id = "NC33", name = "???", description = "mysterious node" }
+    , { id = "NC35", name = "???", description = "mysterious node" }
+    , { id = "NC36", name = "???", description = "mysterious node" }
+    , { id = "NC37", name = "???", description = "mysterious node" }
+    , { id = "NC38", name = "???", description = "mysterious node" }
+    , { id = "NC39", name = "???", description = "mysterious node" }
+    , { id = "NC40", name = "???", description = "mysterious node" }
+    , { id = "NC41", name = "???", description = "mysterious node" }
+    , { id = "NC42", name = "???", description = "mysterious node" }
+    , { id = "NC43", name = "???", description = "mysterious node" }
+    , { id = "CSF1", name = "???", description = "mysterious node" }
+    , { id = "CSF2", name = "???", description = "mysterious node" }
+    , { id = "CSF3", name = "???", description = "mysterious node" }
+    , { id = "CSF4", name = "???", description = "mysterious node" }
+    , { id = "CSF5", name = "???", description = "mysterious node" }
+    , { id = "CSF6", name = "???", description = "mysterious node" }
+    , { id = "CSF7", name = "???", description = "mysterious node" }
+    , { id = "CSF8", name = "???", description = "mysterious node" }
+    , { id = "CSF9", name = "???", description = "mysterious node" }
+    , { id = "CSF10", name = "???", description = "mysterious node" }
+    , { id = "CSF11", name = "???", description = "mysterious node" }
+    , { id = "CSF12", name = "???", description = "mysterious node" }
+    , { id = "CSF13", name = "???", description = "mysterious node" }
+    , { id = "CSF14", name = "???", description = "mysterious node" }
+    , { id = "CSF15", name = "???", description = "mysterious node" }
+    , { id = "CSF16", name = "???", description = "mysterious node" }
+    , { id = "CSF17", name = "???", description = "mysterious node" }
+    , { id = "CSF18", name = "???", description = "mysterious node" }
+    , { id = "CSF19", name = "???", description = "mysterious node" }
+    , { id = "CSF20", name = "???", description = "mysterious node" }
+    , { id = "CSF21", name = "???", description = "mysterious node" }
+    , { id = "CSF22", name = "???", description = "mysterious node" }
+    , { id = "CSF23", name = "???", description = "mysterious node" }
+    , { id = "CSF24", name = "???", description = "mysterious node" }
+    , { id = "SO1", name = "???", description = "mysterious node" }
+    , { id = "SO2", name = "???", description = "mysterious node" }
+    , { id = "SO3", name = "???", description = "mysterious node" }
+    , { id = "SO4", name = "???", description = "mysterious node" }
+    , { id = "SO5", name = "???", description = "mysterious node" }
+    , { id = "SO6", name = "???", description = "mysterious node" }
+    , { id = "VISION", name = "???", description = "mysterious node" }
     ]
 
 

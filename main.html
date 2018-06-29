@@ -126,13 +126,27 @@ app.ports.tree.subscribe(function(tree) {
 };
 
 var network = new vis.Network(container, data, options);
+var timeout = null;
 
 network.on("doubleClick", function(e){
-  if (e.nodes.length > 0)
-    app.ports.selectNode.send(e.nodes[0]);
-  else
-    app.ports.selectNode.send("VISION");
+    window.clearTimeout(timeout);
+    if (e.nodes.length > 0)
+        app.ports.selectNode.send(e.nodes[0]);
+    else
+        app.ports.selectNode.send("VISION");
 });
+
+network.on("click", function(e){
+    window.clearTimeout(timeout);
+
+    if (e.nodes.length == 0)
+        return;
+
+    timeout = window.setTimeout(function(){
+        app.ports.showNode.send(e.nodes[0]);
+    }, 400);
+});
+
 
 });
 </script>

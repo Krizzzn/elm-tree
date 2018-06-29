@@ -34,7 +34,7 @@ type alias Model =
     { graph : Graph
     , location : Navigation.Location
     , currentPath : Graph
-    , currentFocus : String
+    , showDescription : Maybe String
     }
 
 
@@ -55,7 +55,7 @@ init location =
             { graph = defaultgraph
             , location = location
             , currentPath = Graph.filterGraph defaultgraph currentPath
-            , currentFocus = currentPath
+            , showDescription = Maybe.Nothing
             }
     in
         ( default, JsGraph.tree default.currentPath )
@@ -68,6 +68,7 @@ init location =
 type Msg
     = ChangeSelection String
     | UrlChange Navigation.Location
+    | ShowDescription String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -90,9 +91,16 @@ update msg model =
                         String.dropLeft 1 location.hash
 
                 newModel =
-                    { model | location = location, currentFocus = newSelection, currentPath = Graph.filterGraph model.graph newSelection }
+                    { model | location = location, currentPath = Graph.filterGraph model.graph newSelection }
             in
                 ( newModel, JsGraph.tree newModel.currentPath )
+
+        ShowDescription nodeId ->
+            let
+                newModel =
+                    { model | showDescription = Maybe.Just nodeId }
+            in
+                ( newModel, Cmd.none )
 
 
 
@@ -101,7 +109,10 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    JsGraph.selectNode ChangeSelection
+    Sub.batch
+        [ JsGraph.selectNode ChangeSelection
+        , JsGraph.showNode ShowDescription
+        ]
 
 
 
@@ -112,7 +123,7 @@ view : Model -> Html Msg
 view model =
     let
         node =
-            Maybe.withDefault { id = "NC1", name = "?" } <|
+            Maybe.withDefault { id = "NC1", name = "?", description = "" } <|
                 findNodeById model.currentPath "NC1"
 
         options =
@@ -129,12 +140,19 @@ view model =
                     ]
                 ]
                 []
-            , select [ HEvent.onInput ChangeSelection ] <|
-                List.map
-                    (\n -> option [ value n.id ] [ text ("[" ++ n.id ++ "] " ++ n.name) ])
-                    options
-            , renderPath model.currentPath
+            , renderLongdescription model.showDescription
             ]
+
+
+renderLongdescription : Maybe String -> Html msg
+renderLongdescription nodeId =
+    case nodeId of
+        Maybe.Nothing ->
+            Html.text ""
+
+        Maybe.Just node ->
+            div [] [ Html.text node ]
+
 
 
 renderPath : Graph -> Html msg
