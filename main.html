@@ -13,7 +13,7 @@
         </style>
     </head>
 <body>
-    <div id="mynetwork" style="width:90%; height: 650px; border: 1px solid black"> </div>
+
 </body>
 <script src="/_compile/main.elm" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
@@ -41,7 +41,7 @@ app.ports.tree.subscribe(function(tree) {
 
   for (var i = tree.nodes.length - 1; i >= 0; i--) {
     var node = tree.nodes[i];
-    node.label = node.name;
+    node.label = "[" + node.id + "] " + node.name;
     node.margin = 5;
 
     node.fixed = {y: true};
@@ -114,15 +114,15 @@ app.ports.tree.subscribe(function(tree) {
     layout: {
       hierarchical: {
         enabled: true,
-    //nodeSpacing: 600,
-    //nodeDistance: 600,
-    levelSeparation:150,
-    blockShifting: true,
-    edgeMinimization: false,
-    direction: "DU",
-    sortMethod: "directed"
-  }
-}
+        //nodeSpacing: 600,
+        //nodeDistance: 600,
+        levelSeparation:150,
+        blockShifting: true,
+        edgeMinimization: false,
+        direction: "DU",
+        sortMethod: "directed"
+        }
+    }
 };
 
 var network = new vis.Network(container, data, options);

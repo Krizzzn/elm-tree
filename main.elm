@@ -14,10 +14,11 @@ import StaticData exposing (..)
 import Graph exposing (..)
 import SvgGraph exposing (..)
 import JsGraph exposing (..)
+import Navigation
 
 
 main =
-    Html.program
+    Navigation.program UrlChange
         { init = init
         , view = view
         , update = update
@@ -31,27 +32,33 @@ main =
 
 type alias Model =
     { graph : Graph
+    , location : Navigation.Location
     , currentPath : Graph
     , currentFocus : String
     }
 
 
-init : ( Model, Cmd Msg )
-init =
+init : Navigation.Location -> ( Model, Cmd Msg )
+init location =
     let
         defaultgraph =
             { nodes = projects
             , edges = connections
             }
 
+        currentPath =
+            getCurrentFocus defaultgraph <|
+                String.dropLeft 1 location.hash
+
         default : Model
         default =
             { graph = defaultgraph
-            , currentPath = Graph.filterGraph defaultgraph "NC1"
-            , currentFocus = "VISION"
+            , location = location
+            , currentPath = Graph.filterGraph defaultgraph currentPath
+            , currentFocus = currentPath
             }
     in
-        ( default, JsGraph.tree defaultgraph )
+        ( default, JsGraph.tree default.currentPath )
 
 
 
@@ -59,20 +66,31 @@ init =
 
 
 type Msg
-    = Tick Time
-    | ChangeSelection String
+    = ChangeSelection String
+    | UrlChange Navigation.Location
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Tick newTime ->
-            ( model, Cmd.none )
-
         ChangeSelection newSelection ->
             let
+                m =
+                    model.location
+
+                location =
+                    { m | hash = "#" ++ newSelection }
+            in
+                ( model, Navigation.modifyUrl (location.pathname ++ location.hash) )
+
+        UrlChange location ->
+            let
+                newSelection =
+                    getCurrentFocus model.graph <|
+                        String.dropLeft 1 location.hash
+
                 newModel =
-                    { model | currentFocus = newSelection, currentPath = Graph.filterGraph model.graph newSelection }
+                    { model | location = location, currentFocus = newSelection, currentPath = Graph.filterGraph model.graph newSelection }
             in
                 ( newModel, JsGraph.tree newModel.currentPath )
 
@@ -102,6 +120,15 @@ view model =
     in
         div []
             [ Html.h1 [] [ text "The Graph" ]
+            , div
+                [ id "mynetwork"
+                , style
+                    [ ( "height", "500px" )
+                    , ( "width", "90%" )
+                    , ( "border", "1px solid black" )
+                    ]
+                ]
+                []
             , select [ HEvent.onInput ChangeSelection ] <|
                 List.map
                     (\n -> option [ value n.id ] [ text ("[" ++ n.id ++ "] " ++ n.name) ])
@@ -128,3 +155,15 @@ render nodes =
 
         Maybe.Just node ->
             node.name
+
+
+getCurrentFocus : Graph -> String -> String
+getCurrentFocus graph hash =
+    let
+        exists =
+            Graph.idExists graph hash
+    in
+        if exists then
+            hash
+        else
+            "VISION"

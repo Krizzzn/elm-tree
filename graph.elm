@@ -83,6 +83,16 @@ pathify graph node =
             }
 
 
+idExists : Graph -> String -> Bool
+idExists graph id =
+    let
+        count : Int
+        count =
+            List.filter (\n -> id == n.id) graph.nodes |> List.length
+    in
+        count > 0
+
+
 findNodeById : Graph -> String -> Maybe Node
 findNodeById graph id =
     findNodesById graph id
