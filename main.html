@@ -15,6 +15,63 @@
 <body>
 
 </body>
+
+<style>
+    
+    .project-container {
+        position: relative;
+        height: 500px;
+        width: 90%;
+        border: 1px solid black;
+    }
+
+    .project-container #network {
+        height: 100%;
+        width: 100%;
+    }
+
+    .project-container .background {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .project-container .content {
+        position: absolute;
+        top: 40px;
+        left: 20%;
+        background-color: white;
+        padding: 10px;
+        width: 60%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 5px;
+    }
+
+    .project-container .content h1{
+        font-size: 1.20em;
+        margin: 0;
+    }
+
+    .project-container .content h2{
+        font-size: 1.15em;
+        margin: 0;
+    }
+
+    .project-container .content h3{
+        font-size: 1.10em;
+        margin: 0;
+    }
+
+    .project-container .content h4{
+        font-size: 1.05em;
+        margin: 0;
+    }
+
+</style>
+
 <script src="/_compile/main.elm" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
 <script>
@@ -35,29 +92,50 @@ app.ports.tree.subscribe(function(tree) {
     orange: '#FAA21B',
     coolgray06: '#ABA7A7',
     coolgray09: '#78777A',
-    coolgray11: '#55565A'
+    coolgray11: '#55565A',
+    white: "#FFFFFF"
   };
 
+  var setNodeStyle = function(node, type) {
+
+    node.font = { "color": colors.white };
+    node.margin = 10;
+    node.fixed = {y: true};
+    node.chosen = {
+        label: false,
+        node:  function(values, id, selected, hovering) {
+            values.shadowSize = 16;
+        //    values.borderWidth = 1;
+        }
+    };
+
+    switch (type){
+        case "VISION":
+            node.mass = 100;
+            node.color = colors.blue;
+            break;
+        case "SO":
+            node.color = colors.coolgray06;
+            break;
+        case "CSF":
+            node.color = colors.coolgray09;
+            break;
+        case "NC":
+        default:
+            node.color = colors.coolgray11;
+            break;
+    }
+  }
+
+  var typeEx = /^[A-Z]+/;
 
   for (var i = tree.nodes.length - 1; i >= 0; i--) {
     var node = tree.nodes[i];
     node.label = "[" + node.id + "] " + node.name;
-    node.margin = 5;
 
-    node.fixed = {y: true};
-
-    if (node.id.match(/NC/)){
-      node.color = colors.coolgray11;
-    }
-    if (node.id.match(/CSF/))
-      node.color = colors.coolgray09;
-    if (node.id.match(/SO/))
-      node.color = colors.coolgray06;
-    if (node.id.match(/VISION/)){
-     node.mass = 100,
-     node.color = colors.blue
-   }
- }
+    var type = (typeEx.exec(node.id) || ["any"])[0];
+    setNodeStyle(node, type);
+  }
 
   // create an array with nodes
   var nodes = new vis.DataSet(tree.nodes);
@@ -66,7 +144,7 @@ app.ports.tree.subscribe(function(tree) {
   var edges = new vis.DataSet(tree.edges);
 
   // create a network
-  var container = document.getElementById('mynetwork');
+  var container = document.getElementById('network');
   var data = {
     nodes: nodes,
     edges: edges
@@ -106,8 +184,8 @@ app.ports.tree.subscribe(function(tree) {
     },
 
     physics: {
-      enabled: true
-      ,     hierarchicalRepulsion: {
+      enabled: true, 
+        hierarchicalRepulsion: {
         nodeDistance: 220
       }
     },

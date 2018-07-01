@@ -16,6 +16,7 @@ import SvgGraph exposing (..)
 import JsGraph exposing (..)
 import Navigation
 import Markdown
+import Keyboard
 
 
 main =
@@ -70,6 +71,7 @@ type Msg
     = ChangeSelection String
     | UrlChange Navigation.Location
     | ShowDescription String
+    | KeyMsg Keyboard.KeyCode
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -97,11 +99,18 @@ update msg model =
                 ( newModel, JsGraph.tree newModel.currentPath )
 
         ShowDescription nodeId ->
-            let
-                newModel =
-                    { model | showDescription = Maybe.Just nodeId }
-            in
-                ( newModel, Cmd.none )
+            ( { model | showDescription = Maybe.Just nodeId }, Cmd.none )
+
+        KeyMsg code ->
+            case code of
+                13 ->
+                    ( { model | showDescription = Maybe.Nothing }, Cmd.none )
+
+                27 ->
+                    ( { model | showDescription = Maybe.Nothing }, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
 
 
 
@@ -113,6 +122,7 @@ subscriptions model =
     Sub.batch
         [ JsGraph.selectNode ChangeSelection
         , JsGraph.showNode ShowDescription
+        , Keyboard.downs KeyMsg
         ]
 
 
@@ -132,16 +142,10 @@ view model =
     in
         div []
             [ Html.h1 [] [ text "The Graph" ]
-            , div
-                [ id "mynetwork"
-                , style
-                    [ ( "height", "500px" )
-                    , ( "width", "90%" )
-                    , ( "border", "1px solid black" )
-                    ]
+            , div [ class "project-container" ]
+                [ div [ id "network" ] []
+                , renderLongdescription model.graph model.showDescription
                 ]
-                []
-            , renderLongdescription model.graph model.showDescription
 
             --, select [ HEvent.onInput ChangeSelection ] <|
             --    List.map
@@ -169,7 +173,9 @@ renderLongdescriptionOfNode maybeNode =
             Html.text ""
 
         Maybe.Just node ->
-            div [] [ Markdown.toHtml [ class "content" ] (renderNodeAsMarkdown node) ]
+            Html.div [ class "background" ]
+                [ Markdown.toHtml [ class "content" ] (renderNodeAsMarkdown node)
+                ]
 
 
 renderNodeAsMarkdown : Node -> String
