@@ -71,6 +71,7 @@ type Msg
     = ChangeSelection String
     | UrlChange Navigation.Location
     | ShowDescription String
+    | HideDescription
     | KeyMsg Keyboard.KeyCode
 
 
@@ -100,6 +101,9 @@ update msg model =
 
         ShowDescription nodeId ->
             ( { model | showDescription = Maybe.Just nodeId }, Cmd.none )
+
+        HideDescription ->
+            ( { model | showDescription = Maybe.Nothing }, Cmd.none )
 
         KeyMsg code ->
             case code of
