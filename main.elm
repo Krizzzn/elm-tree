@@ -17,10 +17,12 @@ import JsGraph exposing (..)
 import Navigation
 import Markdown
 import Keyboard
+import Msg exposing (Msg)
+import Sharepoint
 
 
 main =
-    Navigation.program UrlChange
+    Navigation.program Msg.UrlChange
         { init = init
         , view = view
         , update = update
@@ -32,11 +34,18 @@ main =
 -- MODEL
 
 
+type State
+    = Loading
+    | Error
+    | Ready
+
+
 type alias Model =
     { graph : Graph
     , location : Navigation.Location
     , currentPath : Graph
     , showDescription : Maybe String
+    , state : State
     }
 
 
@@ -44,8 +53,8 @@ init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
     let
         defaultgraph =
-            { nodes = projects
-            , edges = connections
+            { nodes = []
+            , edges = []
             }
 
         currentPath =
@@ -58,27 +67,20 @@ init location =
             , location = location
             , currentPath = Graph.filterGraph defaultgraph currentPath
             , showDescription = Maybe.Nothing
+            , state = Loading
             }
     in
-        ( default, JsGraph.tree default.currentPath )
+        ( default, Cmd.batch [ Sharepoint.getJsonData Sharepoint.Edges, Sharepoint.getJsonData Sharepoint.Nodes ] )
 
 
 
 -- UPDATE
 
 
-type Msg
-    = ChangeSelection String
-    | UrlChange Navigation.Location
-    | ShowDescription String
-    | HideDescription
-    | KeyMsg Keyboard.KeyCode
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ChangeSelection newSelection ->
+        Msg.ChangeSelection newSelection ->
             let
                 m =
                     model.location
@@ -88,7 +90,7 @@ update msg model =
             in
                 ( model, Navigation.modifyUrl (location.pathname ++ location.hash) )
 
-        UrlChange location ->
+        Msg.UrlChange location ->
             let
                 newSelection =
                     getCurrentFocus model.graph <|
@@ -99,13 +101,13 @@ update msg model =
             in
                 ( newModel, JsGraph.tree newModel.currentPath )
 
-        ShowDescription nodeId ->
+        Msg.ShowDescription nodeId ->
             ( { model | showDescription = Maybe.Just nodeId }, Cmd.none )
 
-        HideDescription ->
+        Msg.HideDescription ->
             ( { model | showDescription = Maybe.Nothing }, Cmd.none )
 
-        KeyMsg code ->
+        Msg.KeyMsg code ->
             case code of
                 13 ->
                     ( { model | showDescription = Maybe.Nothing }, Cmd.none )
@@ -116,6 +118,75 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        Msg.DoNothing ->
+            ( model, Cmd.none )
+
+        Msg.EdgesLoaded (Ok edges) ->
+            let
+                graph =
+                    model.graph
+
+                newmodel =
+                    { model | graph = { graph | edges = edges } }
+            in
+                displayModel newmodel
+
+        Msg.EdgesLoaded (Err e) ->
+            let
+                _ =
+                    Debug.log "Error occured:" e
+            in
+                ( { model | state = Error }, Cmd.none )
+
+        Msg.NodesLoaded (Ok nodes) ->
+            let
+                graph =
+                    model.graph
+
+                newmodel =
+                    { model | graph = { graph | nodes = nodes } }
+            in
+                displayModel newmodel
+
+        Msg.NodesLoaded (Err e) ->
+            let
+                _ =
+                    Debug.log "Error occured:" e
+            in
+                ( { model | state = Error }, Cmd.none )
+
+        Msg.MorePlease ->
+            let
+                _ =
+                    Debug.log "foo is" "foo3"
+            in
+                ( model, Cmd.batch [ Sharepoint.getJsonData Sharepoint.Edges, Sharepoint.getJsonData Sharepoint.Nodes ] )
+
+
+displayModel : Model -> ( Model, Cmd Msg )
+displayModel model =
+    let
+        currentPath =
+            getCurrentFocus model.graph <|
+                "VISION"
+
+        state : State
+        state =
+            if model.state == Error then
+                Error
+            else if length model.graph.nodes == 0 || length model.graph.edges == 0 then
+                Loading
+            else
+                Ready
+
+        newModel =
+            { model
+                | state = state
+                , currentPath = Graph.filterGraph model.graph currentPath
+            }
+    in
+        ( newModel, JsGraph.tree newModel.currentPath )
+
 
 
 -- SUBSCRIPTIONS
@@ -124,9 +195,9 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ JsGraph.selectNode ChangeSelection
-        , JsGraph.showNode ShowDescription
-        , Keyboard.downs KeyMsg
+        [ JsGraph.selectNode Msg.ChangeSelection
+        , JsGraph.showNode Msg.ShowDescription
+        , Keyboard.downs Msg.KeyMsg
         ]
 
 
@@ -136,30 +207,41 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
+    div []
+        [ Html.h1 [] [ text "The Graph" ]
+        , renderNetwork model
+
+        --, button [ onClick Msg.MorePlease ] [ text "hit the server!" ]
+        ]
+
+
+loadingAnimation : Model -> Html Msg
+loadingAnimation model =
     let
-        node =
-            Maybe.withDefault { id = "NC1", name = "?", description = "" } <|
-                findNodeById model.currentPath "NC1"
-
-        options =
-            model.graph.nodes
+        gif name =
+            div [ class ("state " ++ name) ] []
     in
-        div []
-            [ Html.h1 [] [ text "The Graph" ]
-            , div [ class "project-container" ]
-                [ div [ id "network" ] []
-                , renderLongdescription model.graph model.showDescription
-                ]
+        case model.state of
+            Loading ->
+                gif "loading"
 
-            --, select [ HEvent.onInput ChangeSelection ] <|
-            --    List.map
-            --        (\n -> option [ value n.id ] [ text ("[" ++ n.id ++ "] " ++ n.name) ])
-            --        options
-            --, renderPath model.currentPath
-            ]
+            Error ->
+                gif "error"
+
+            Ready ->
+                text ""
 
 
-renderLongdescription : Graph -> Maybe String -> Html msg
+renderNetwork : Model -> Html Msg
+renderNetwork model =
+    div [ class "project-container" ]
+        [ loadingAnimation model
+        , div [ id "network" ] []
+        , renderLongdescription model.graph model.showDescription
+        ]
+
+
+renderLongdescription : Graph -> Maybe String -> Html Msg
 renderLongdescription graph maybeNodeId =
     case maybeNodeId of
         Maybe.Nothing ->
@@ -170,14 +252,14 @@ renderLongdescription graph maybeNodeId =
                 |> renderLongdescriptionOfNode
 
 
-renderLongdescriptionOfNode : Maybe Node -> Html msg
+renderLongdescriptionOfNode : Maybe Node -> Html Msg
 renderLongdescriptionOfNode maybeNode =
     case maybeNode of
         Maybe.Nothing ->
             Html.text ""
 
         Maybe.Just node ->
-            Html.div [ class "background" ]
+            Html.div [ class "background", onClick Msg.HideDescription ]
                 [ Markdown.toHtml [ class "content" ] (renderNodeAsMarkdown node)
                 ]
 

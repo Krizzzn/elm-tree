@@ -30,6 +30,22 @@
         border-bottom: 1px solid black;
     }
 
+    .project-container div.state {
+      width: 100%;
+      height: 100%;
+
+      background-size: 100%!important;
+      background-position: center center!important;
+    }
+
+    .project-container div.state.error {
+      background: url('img/error.gif') no-repeat;
+    }
+
+    .project-container div.state.loading {
+      background: url('img/loading.gif') no-repeat;
+    }
+
     .project-container #network {
         height: 100%;
         width: 100%;
@@ -78,6 +94,7 @@
 </style>
 
 <script src="/_compile/main.elm" charset="utf-8"></script>
+<script src="app.js" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
 <script>
 
@@ -88,6 +105,9 @@ else
   app = runElmProgram();
 
 app.ports.tree.subscribe(function(tree) {
+
+  if (!document.getElementById('network'))
+    return;
 
   var colors = {
     blue: '#0083BF',
@@ -189,7 +209,7 @@ app.ports.tree.subscribe(function(tree) {
     },
 
     physics: {
-      enabled: true, 
+      enabled: true,
         hierarchicalRepulsion: {
         nodeDistance: 220
       }
