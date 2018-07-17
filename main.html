@@ -91,8 +91,14 @@
         margin: 0;
     }
 
+    li.selected {
+        background-color: red;
+
+    }
+
 </style>
 
+<script src="js/graph.js" charset="utf-8"></script>
 <script src="/_compile/main.elm" charset="utf-8"></script>
 <script src="app.js" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
@@ -104,154 +110,6 @@ if (Elm)
 else
   app = runElmProgram();
 
-app.ports.tree.subscribe(function(tree) {
-
-  if (!document.getElementById('network'))
-    return;
-
-  var colors = {
-    blue: '#0083BF',
-    purple: '#7F3F98',
-    green: '#00A886',
-    pink: '#EE2375',
-    orange: '#FAA21B',
-    coolgray06: '#ABA7A7',
-    coolgray09: '#78777A',
-    coolgray11: '#55565A',
-    white: "#FFFFFF"
-  };
-
-  var setNodeStyle = function(node, type) {
-
-    node.font = { "color": colors.white };
-    node.margin = 10;
-    node.fixed = {y: true};
-    node.chosen = {
-        label: false,
-        node:  function(values, id, selected, hovering) {
-            values.shadowSize = 16;
-        //    values.borderWidth = 1;
-        }
-    };
-
-    switch (type){
-        case "VISION":
-            node.mass = 100;
-            node.color = colors.blue;
-            break;
-        case "SO":
-            node.color = colors.coolgray06;
-            break;
-        case "CSF":
-            node.color = colors.coolgray09;
-            break;
-        case "NC":
-        default:
-            node.color = colors.coolgray11;
-            break;
-    }
-  }
-
-  var typeEx = /^[A-Z]+/;
-
-  for (var i = tree.nodes.length - 1; i >= 0; i--) {
-    var node = tree.nodes[i];
-    node.label = "[" + node.id + "] " + node.name;
-
-    var type = (typeEx.exec(node.id) || ["any"])[0];
-    setNodeStyle(node, type);
-  }
-
-  // create an array with nodes
-  var nodes = new vis.DataSet(tree.nodes);
-
-  // create an array with edges
-  var edges = new vis.DataSet(tree.edges);
-
-  // create a network
-  var container = document.getElementById('network');
-  var data = {
-    nodes: nodes,
-    edges: edges
-  };
-
-  var shadow = {
-    enabled: true,
-    size: 7,
-    x: 0,
-    y: 3
-  };
-
-  var zoomable = true;
-
-  var options = {
-    interaction: {
-      selectable: zoomable,
-      dragNodes: false,
-      dragView: zoomable,
-      zoomView: zoomable
-    },
-    edges: {
-      font: {
-        size: 12
-      },
-      width: 3
-    },
-    nodes: {
-      shape: 'box',
-      margin: 5,
-      color: '#7BE141',
-      borderWidth: 0,
-      shadow: shadow,
-      widthConstraint: {
-        maximum: 200
-      }
-    },
-
-    physics: {
-      enabled: true,
-        hierarchicalRepulsion: {
-        nodeDistance: 220
-      }
-    },
-    layout: {
-      hierarchical: {
-        enabled: true,
-        //nodeSpacing: 600,
-        //nodeDistance: 600,
-        levelSeparation:150,
-        blockShifting: true,
-        edgeMinimization: false,
-        direction: "DU",
-        sortMethod: "directed"
-        }
-    }
-};
-
-var network = new vis.Network(container, data, options);
-var timeout = null;
-
-network.on("doubleClick", function(e){
-    window.clearTimeout(timeout);
-    if (e.nodes.length > 0)
-        app.ports.selectNode.send(e.nodes[0]);
-    else
-        app.ports.selectNode.send("VISION");
-});
-
-network.on("click", function(e){
-    window.clearTimeout(timeout);
-
-    var nodeId = "---";
-    if (e.nodes.length > 0)
-        nodeId = e.nodes[0];
-
-    timeout = window.setTimeout(function(){
-        app.ports.showNode.send(nodeId);
-    }, 400);
-});
-
-
-});
+app.ports.tree.subscribe(Graph);
 </script>
 </html>
