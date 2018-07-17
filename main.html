@@ -91,9 +91,48 @@
         margin: 0;
     }
 
-    li.selected {
-        background-color: red;
 
+    #search {
+
+    }
+
+    #search #choice a {
+        padding-right: 5px;
+        cursor: pointer;
+    }
+
+    #search ul {
+        padding-left: 10px;
+        max-height: 400px;
+        overflow: scroll;
+    }
+
+    #search li {
+        font-size: 0.8em;
+        list-style: none;
+        width: 300px;
+        margin-left: 10px;
+    }
+
+    #search li.selected {
+        list-style: circle;
+    }
+
+    #search li:hover {
+        list-style: disc;
+    }
+
+    #search li a {
+        color: black;
+        text-decoration: none;
+
+        display: inline-block;
+
+        white-space: nowrap;
+        width: 100%;                   
+        overflow: hidden;              /* "overflow"-Wert darf nicht "visible" sein */ 
+
+        text-overflow: ellipsis;
     }
 
 </style>

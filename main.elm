@@ -41,9 +41,10 @@ type State
 
 
 type alias Search =
-    { searchString : Maybe String
+    { searchString : String
     , projects : List Node
     , highlight : Int
+    , searchPrefix : String
     }
 
 
@@ -56,6 +57,11 @@ type alias Model =
     , state : State
     , search : Search
     }
+
+
+limitSearchResult : Int
+limitSearchResult =
+    50
 
 
 init : Navigation.Location -> ( Model, Cmd Msg )
@@ -78,7 +84,12 @@ init location =
             , showDescription = Maybe.Nothing
             , highlightNode = Maybe.Nothing
             , state = Loading
-            , search = { searchString = Maybe.Just "implement", projects = [], highlight = 0 }
+            , search =
+                { searchString = ""
+                , projects = []
+                , highlight = 0
+                , searchPrefix = ""
+                }
             }
     in
         ( default, Cmd.batch [ Sharepoint.getJsonData Sharepoint.Edges, Sharepoint.getJsonData Sharepoint.Nodes ] )
@@ -112,7 +123,11 @@ update msg model =
                             String.dropLeft 1 location.hash
 
                     newModel =
-                        { model | location = location, currentPath = Graph.filterGraph model.graph newSelection, showDescription = Maybe.Nothing }
+                        { model
+                            | location = location
+                            , currentPath = Graph.filterGraph model.graph newSelection
+                            , showDescription = Maybe.Nothing
+                        }
                 in
                     ( newModel, JsGraph.tree newModel.currentPath )
 
@@ -128,7 +143,7 @@ update msg model =
             Msg.KeyMsg code ->
                 case ( code, search.highlight ) of
                     ( 13, 0 ) ->
-                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = Maybe.Nothing, projects = [], highlight = 0 } }, Cmd.none )
+                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = "", projects = [], highlight = 0 } }, Cmd.none )
 
                     ( 13, _ ) ->
                         let
@@ -145,13 +160,13 @@ update msg model =
                                     update (Msg.DoNothing) model
 
                     ( 27, _ ) ->
-                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = Maybe.Nothing, projects = [], highlight = 0 } }, Cmd.none )
+                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = "", projects = [], highlight = 0 } }, Cmd.none )
 
                     ( 38, _ ) ->
                         ( { model | search = { search | highlight = (Basics.max 0 (search.highlight - 1)) } }, Cmd.none )
 
                     ( 40, _ ) ->
-                        ( { model | search = { search | highlight = (Basics.min 15 (search.highlight + 1)) } }, Cmd.none )
+                        ( { model | search = { search | highlight = (Basics.min limitSearchResult (search.highlight + 1)) } }, Cmd.none )
 
                     ( _, _ ) ->
                         ( model, Cmd.none )
@@ -194,7 +209,20 @@ update msg model =
                     ( { model | state = Error }, Cmd.none )
 
             Msg.Search find ->
-                ( { model | search = { search | searchString = Maybe.Just find, projects = Graph.findNodesByString (Maybe.Just find) model.graph, highlight = 0 } }, Cmd.none )
+                let
+                    s =
+                        { search | searchString = find, highlight = 0 }
+                in
+                    ( { model | search = { s | projects = filterProjects s model.graph } }, Cmd.none )
+
+            Msg.SearchPrefix find ->
+                update (Msg.Search search.searchString) <| { model | search = { search | searchPrefix = find } }
+
+
+filterProjects : Search -> Graph -> List Node
+filterProjects search graph =
+    Graph.findNodesByString (search.searchString) <|
+        Graph.findNodesById graph search.searchPrefix
 
 
 displayModel : Model -> ( Model, Cmd Msg )
@@ -270,13 +298,27 @@ renderNetwork model =
         [ loadingAnimation model
         , div [ id "network" ] []
         , renderLongdescription model.graph model.showDescription
-        , input [ onInput Msg.Search, value (Maybe.withDefault "" model.search.searchString) ] []
-        , renderFinder model.search.projects model.search.highlight
+        , renderSearch model
         ]
 
 
-renderFinder : List Node -> Int -> Html Msg
-renderFinder nodes selected =
+renderSearch : Model -> Html Msg
+renderSearch model =
+    div [ id "search" ]
+        [ input [ onInput Msg.Search, value model.search.searchString, placeholder "filter" ] []
+        , div [ id "choice" ]
+            [ a [ onClick (Msg.SearchPrefix "SO") ] [ text "SO" ]
+            , a [ onClick (Msg.SearchPrefix "CSF") ] [ text "CSF" ]
+            , a [ onClick (Msg.SearchPrefix "NC") ] [ text "NC" ]
+            , a [ onClick (Msg.SearchPrefix "PRJ") ] [ text "PRJ" ]
+            , a [ onClick (Msg.SearchPrefix "") ] [ text "all" ]
+            ]
+        , renderSearchResult model.search.projects model.search.highlight
+        ]
+
+
+renderSearchResult : List Node -> Int -> Html Msg
+renderSearchResult nodes selected =
     ul [] <|
         List.indexedMap (renderNodeInFinder selected) <|
             sortedNodes nodes
@@ -284,7 +326,7 @@ renderFinder nodes selected =
 
 sortedNodes : List Node -> List Node
 sortedNodes nodes =
-    List.take 15 <|
+    List.take limitSearchResult <|
         List.sortBy (\node -> node.id) <|
             nodes
 
@@ -292,13 +334,13 @@ sortedNodes nodes =
 renderNodeInFinder : Int -> Int -> Node -> Html Msg
 renderNodeInFinder selected idx node =
     let
-        classN =
+        className =
             if selected == (idx + 1) then
                 "selected"
             else
                 ""
     in
-        li [ class classN ]
+        li [ class className ]
             [ a [ href ("#" ++ node.id) ] [ text ("[" ++ node.id ++ "] " ++ node.name) ]
             ]
 

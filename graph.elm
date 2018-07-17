@@ -133,14 +133,9 @@ connectsFrom node edge =
     edge.from == node.id
 
 
-findNodesByString : Maybe String -> Graph -> List Node
-findNodesByString findByString graph =
-    case findByString of
-        Just find ->
-            List.filter (filterNode find) graph.nodes
-
-        Nothing ->
-            []
+findNodesByString : String -> List Node -> List Node
+findNodesByString findByString nodes =
+    List.filter (filterNode findByString) nodes
 
 
 filterNode : String -> Node -> Bool

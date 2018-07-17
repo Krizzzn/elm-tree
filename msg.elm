@@ -16,3 +16,4 @@ type Msg
     | EdgesLoaded (Result Http.Error (List Edge))
     | NodesLoaded (Result Http.Error (List Node))
     | Search String
+    | SearchPrefix String
