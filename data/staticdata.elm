@@ -4,7 +4,7 @@ module StaticData exposing (projects, connections, Node, Edge)
 type alias Node =
     { id : String
     , name : String
-    , description : String
+    , description : Maybe String
     }
 
 

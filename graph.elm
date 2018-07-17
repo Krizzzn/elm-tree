@@ -131,3 +131,27 @@ connectsTo edge node =
 connectsFrom : Node -> Edge -> Bool
 connectsFrom node edge =
     edge.from == node.id
+
+
+findNodesByString : Maybe String -> Graph -> List Node
+findNodesByString findByString graph =
+    case findByString of
+        Just find ->
+            List.filter (filterNode find) graph.nodes
+
+        Nothing ->
+            []
+
+
+filterNode : String -> Node -> Bool
+filterNode find node =
+    let
+        -- split items at Whitespace into list
+        findAtoms =
+            String.toLower find |> String.split " " |> List.filter (\e -> not <| String.isEmpty e)
+
+        matchNode : Node -> String -> Bool
+        matchNode n needle =
+            String.contains needle (String.toLower (n.name ++ " " ++ n.id))
+    in
+        List.all (matchNode node) findAtoms

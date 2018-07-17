@@ -69,7 +69,7 @@ decodeNode =
     JD.map3 Node
         (JD.at [ "NodeId" ] string)
         (JD.at [ "Name" ] string)
-        (JD.at [ "NodeId" ] string)
+        (JD.maybe <| JD.at [ "Longdescription" ] string)
 
 
 decodeEdge : JD.Decoder Edge

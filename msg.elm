@@ -15,4 +15,4 @@ type Msg
     | KeyMsg Keyboard.KeyCode
     | EdgesLoaded (Result Http.Error (List Edge))
     | NodesLoaded (Result Http.Error (List Node))
-    | MorePlease
+    | Search String

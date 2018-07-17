@@ -40,12 +40,21 @@ type State
     | Ready
 
 
+type alias Search =
+    { searchString : Maybe String
+    , projects : List Node
+    , highlight : Int
+    }
+
+
 type alias Model =
     { graph : Graph
     , location : Navigation.Location
     , currentPath : Graph
     , showDescription : Maybe String
+    , highlightNode : Maybe String
     , state : State
+    , search : Search
     }
 
 
@@ -67,7 +76,9 @@ init location =
             , location = location
             , currentPath = Graph.filterGraph defaultgraph currentPath
             , showDescription = Maybe.Nothing
+            , highlightNode = Maybe.Nothing
             , state = Loading
+            , search = { searchString = Maybe.Just "implement", projects = [], highlight = 0 }
             }
     in
         ( default, Cmd.batch [ Sharepoint.getJsonData Sharepoint.Edges, Sharepoint.getJsonData Sharepoint.Nodes ] )
@@ -79,88 +90,111 @@ init location =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        Msg.ChangeSelection newSelection ->
-            let
-                m =
-                    model.location
+    let
+        search =
+            model.search
+    in
+        case msg of
+            Msg.ChangeSelection newSelection ->
+                let
+                    m =
+                        model.location
 
-                location =
-                    { m | hash = "#" ++ newSelection }
-            in
-                ( model, Navigation.modifyUrl (location.pathname ++ location.hash) )
+                    location =
+                        { m | hash = "#" ++ newSelection }
+                in
+                    ( model, Navigation.modifyUrl (location.pathname ++ location.hash) )
 
-        Msg.UrlChange location ->
-            let
-                newSelection =
-                    getCurrentFocus model.graph <|
-                        String.dropLeft 1 location.hash
+            Msg.UrlChange location ->
+                let
+                    newSelection =
+                        getCurrentFocus model.graph <|
+                            String.dropLeft 1 location.hash
 
-                newModel =
-                    { model | location = location, currentPath = Graph.filterGraph model.graph newSelection, showDescription = Maybe.Nothing }
-            in
-                ( newModel, JsGraph.tree newModel.currentPath )
+                    newModel =
+                        { model | location = location, currentPath = Graph.filterGraph model.graph newSelection, showDescription = Maybe.Nothing }
+                in
+                    ( newModel, JsGraph.tree newModel.currentPath )
 
-        Msg.ShowDescription nodeId ->
-            ( { model | showDescription = Maybe.Just nodeId }, Cmd.none )
+            Msg.ShowDescription nodeId ->
+                if (model.highlightNode == Maybe.Just nodeId) then
+                    ( { model | showDescription = Maybe.Just nodeId }, Cmd.none )
+                else
+                    ( { model | highlightNode = Maybe.Just nodeId }, Cmd.none )
 
-        Msg.HideDescription ->
-            ( { model | showDescription = Maybe.Nothing }, Cmd.none )
+            Msg.HideDescription ->
+                ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing }, Cmd.none )
 
-        Msg.KeyMsg code ->
-            case code of
-                13 ->
-                    ( { model | showDescription = Maybe.Nothing }, Cmd.none )
+            Msg.KeyMsg code ->
+                case ( code, search.highlight ) of
+                    ( 13, 0 ) ->
+                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = Maybe.Nothing, projects = [], highlight = 0 } }, Cmd.none )
 
-                27 ->
-                    ( { model | showDescription = Maybe.Nothing }, Cmd.none )
+                    ( 13, _ ) ->
+                        let
+                            selected =
+                                List.head <|
+                                    List.drop (search.highlight - 1) <|
+                                        sortedNodes search.projects
+                        in
+                            case selected of
+                                Just sel ->
+                                    update (Msg.ChangeSelection sel.id) model
 
-                _ ->
-                    ( model, Cmd.none )
+                                Nothing ->
+                                    update (Msg.DoNothing) model
 
-        Msg.DoNothing ->
-            ( model, Cmd.none )
+                    ( 27, _ ) ->
+                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = Maybe.Nothing, projects = [], highlight = 0 } }, Cmd.none )
 
-        Msg.EdgesLoaded (Ok edges) ->
-            let
-                graph =
-                    model.graph
+                    ( 38, _ ) ->
+                        ( { model | search = { search | highlight = (Basics.max 0 (search.highlight - 1)) } }, Cmd.none )
 
-                newmodel =
-                    { model | graph = { graph | edges = edges } }
-            in
-                displayModel newmodel
+                    ( 40, _ ) ->
+                        ( { model | search = { search | highlight = (Basics.min 15 (search.highlight + 1)) } }, Cmd.none )
 
-        Msg.EdgesLoaded (Err e) ->
-            let
-                _ =
-                    Debug.log "Error occured:" e
-            in
-                ( { model | state = Error }, Cmd.none )
+                    ( _, _ ) ->
+                        ( model, Cmd.none )
 
-        Msg.NodesLoaded (Ok nodes) ->
-            let
-                graph =
-                    model.graph
+            Msg.DoNothing ->
+                ( model, Cmd.none )
 
-                newmodel =
-                    { model | graph = { graph | nodes = nodes } }
-            in
-                displayModel newmodel
+            Msg.EdgesLoaded (Ok edges) ->
+                let
+                    graph =
+                        model.graph
 
-        Msg.NodesLoaded (Err e) ->
-            let
-                _ =
-                    Debug.log "Error occured:" e
-            in
-                ( { model | state = Error }, Cmd.none )
+                    newmodel =
+                        { model | graph = { graph | edges = edges } }
+                in
+                    displayModel newmodel
 
-        Msg.MorePlease ->
-            let
-                _ =
-                    Debug.log "foo is" "foo3"
-            in
-                ( model, Cmd.batch [ Sharepoint.getJsonData Sharepoint.Edges, Sharepoint.getJsonData Sharepoint.Nodes ] )
+            Msg.EdgesLoaded (Err e) ->
+                let
+                    _ =
+                        Debug.log "Error occured:" e
+                in
+                    ( { model | state = Error }, Cmd.none )
+
+            Msg.NodesLoaded (Ok nodes) ->
+                let
+                    graph =
+                        model.graph
+
+                    newmodel =
+                        { model | graph = { graph | nodes = nodes } }
+                in
+                    displayModel newmodel
+
+            Msg.NodesLoaded (Err e) ->
+                let
+                    _ =
+                        Debug.log "Error occured:" e
+                in
+                    ( { model | state = Error }, Cmd.none )
+
+            Msg.Search find ->
+                ( { model | search = { search | searchString = Maybe.Just find, projects = Graph.findNodesByString (Maybe.Just find) model.graph, highlight = 0 } }, Cmd.none )
 
 
 displayModel : Model -> ( Model, Cmd Msg )
@@ -168,7 +202,7 @@ displayModel model =
     let
         currentPath =
             getCurrentFocus model.graph <|
-                "VISION"
+                String.dropLeft 1 model.location.hash
 
         state : State
         state =
@@ -208,10 +242,8 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     div []
-        [ Html.h1 [] [ text "The Graph" ]
+        [ Html.h1 [] [ text "" ]
         , renderNetwork model
-
-        --, button [ onClick Msg.MorePlease ] [ text "hit the server!" ]
         ]
 
 
@@ -238,7 +270,37 @@ renderNetwork model =
         [ loadingAnimation model
         , div [ id "network" ] []
         , renderLongdescription model.graph model.showDescription
+        , input [ onInput Msg.Search, value (Maybe.withDefault "" model.search.searchString) ] []
+        , renderFinder model.search.projects model.search.highlight
         ]
+
+
+renderFinder : List Node -> Int -> Html Msg
+renderFinder nodes selected =
+    ul [] <|
+        List.indexedMap (renderNodeInFinder selected) <|
+            sortedNodes nodes
+
+
+sortedNodes : List Node -> List Node
+sortedNodes nodes =
+    List.take 15 <|
+        List.sortBy (\node -> node.id) <|
+            nodes
+
+
+renderNodeInFinder : Int -> Int -> Node -> Html Msg
+renderNodeInFinder selected idx node =
+    let
+        classN =
+            if selected == (idx + 1) then
+                "selected"
+            else
+                ""
+    in
+        li [ class classN ]
+            [ a [ href ("#" ++ node.id) ] [ text ("[" ++ node.id ++ "] " ++ node.name) ]
+            ]
 
 
 renderLongdescription : Graph -> Maybe String -> Html Msg
@@ -259,14 +321,29 @@ renderLongdescriptionOfNode maybeNode =
             Html.text ""
 
         Maybe.Just node ->
-            Html.div [ class "background", onClick Msg.HideDescription ]
-                [ Markdown.toHtml [ class "content" ] (renderNodeAsMarkdown node)
-                ]
+            case node.description of
+                Nothing ->
+                    Html.text ""
+
+                Just _ ->
+                    Html.div [ class "background", onClick Msg.HideDescription ]
+                        [ Markdown.toHtml [ class "content" ] (renderNodeAsMarkdown node)
+                        ]
 
 
 renderNodeAsMarkdown : Node -> String
 renderNodeAsMarkdown node =
-    "# [" ++ node.id ++ "] " ++ node.name ++ "\x0D\n" ++ node.description
+    let
+        longdescription : String
+        longdescription =
+            case node.description of
+                Just ld ->
+                    ld
+
+                Nothing ->
+                    ""
+    in
+        "# [" ++ node.id ++ "] " ++ node.name ++ "\x0D\n" ++ longdescription
 
 
 
