@@ -39,7 +39,7 @@ getJsonRequest url decoder =
     Http.request
         { method = "GET"
         , headers =
-            [ Http.header "accept" "application/json;odata=verbose"
+            [ Http.header "accept" "application/json"
             ]
         , url = url
         , body = Http.emptyBody

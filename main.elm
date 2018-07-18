@@ -160,7 +160,7 @@ update msg model =
                                     update (Msg.DoNothing) model
 
                     ( 27, _ ) ->
-                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = "", projects = [], highlight = 0 } }, Cmd.none )
+                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = "", projects = [], highlight = 0, searchPrefix = "" } }, Cmd.none )
 
                     ( 38, _ ) ->
                         ( { model | search = { search | highlight = (Basics.max 0 (search.highlight - 1)) } }, Cmd.none )
@@ -269,9 +269,8 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ Html.h1 [] [ text "" ]
-        , renderNetwork model
+    div [ id "container" ]
+        [ renderNetwork model
         ]
 
 
@@ -306,15 +305,29 @@ renderSearch : Model -> Html Msg
 renderSearch model =
     div [ id "search" ]
         [ input [ onInput Msg.Search, value model.search.searchString, placeholder "filter" ] []
-        , div [ id "choice" ]
-            [ a [ onClick (Msg.SearchPrefix "SO") ] [ text "SO" ]
-            , a [ onClick (Msg.SearchPrefix "CSF") ] [ text "CSF" ]
-            , a [ onClick (Msg.SearchPrefix "NC") ] [ text "NC" ]
-            , a [ onClick (Msg.SearchPrefix "PRJ") ] [ text "PRJ" ]
-            , a [ onClick (Msg.SearchPrefix "") ] [ text "all" ]
-            ]
+        , renderChoices model.search.searchPrefix
         , renderSearchResult model.search.projects model.search.highlight
         ]
+
+
+renderChoices : String -> Html Msg
+renderChoices selected =
+    let
+        selectedClass b =
+            if selected == b then
+                "selected"
+            else
+                ""
+    in
+        div [ id "choice" ] <|
+            List.map
+                (\( lbl, val ) -> a [ onClick (Msg.SearchPrefix val), class (selectedClass val) ] [ text lbl ])
+                [ ( "SO", "SO" )
+                , ( "CSF", "CSF" )
+                , ( "NC", "NC" )
+                , ( "PRJ", "PRJ" )
+                , ( "all", "" )
+                ]
 
 
 renderSearchResult : List Node -> Int -> Html Msg
