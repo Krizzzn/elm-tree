@@ -1,0 +1,258 @@
+
+/*
+    blue: '#0083BF',
+    purple: '#7F3F98',
+    green: '#00A886',
+    pink: '#EE2375',
+    orange: '#FAA21B',
+    coolgray06: '#ABA7A7',
+    coolgray09: '#78777A',
+    coolgray11: '#55565A',
+    white: "#FFFFFF"
+*/
+
+html, body {
+  position: relative;
+  font-family: Arial;
+  margin:0px;
+  padding:0px;
+  height:100%;
+}
+
+div{
+    position: relative;
+}
+
+#container > h1 {
+    font-size: 18pt;
+    text-transform: uppercase;
+    letter-spacing: .45em;
+    margin-top: 0px;
+    padding-left: 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid black;
+    border-color: #ABA7A7;
+    margin-bottom: 0px;
+}
+
+#container{
+    position: relative;
+    height:auto !important; /* normale Browser */
+    height:100%; /* IE6: setzt dies wie min-height um*/
+    min-height:100%!important; /* normale Browser */
+    margin:0 auto; /* Zentriert die Seite (nicht in IE5) */
+    width: 100%;
+}
+
+.project-container {
+    height: 750px;
+    width: 100%;
+}
+
+.project-container div.state {
+  width: 100%;
+  height: 100%;
+
+  background-size: 100%!important;
+  background-position: center center!important;
+}
+
+.project-container div.state.error {
+  background: url('img/error.gif') no-repeat;
+}
+
+.project-container div.state.loading {
+  background: url('img/loading.gif') no-repeat;
+}
+
+.project-container #network {
+    height: 100%;
+    width: 100%;
+}
+
+.project-container .background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(240, 240, 240, 0.5);
+    z-index: 15;
+}
+
+.project-container .content {
+    position: absolute;
+    top: 40px;
+    left: 20%;
+    background-color: white;
+    padding: 10px;
+    width: 60%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+    z-index: 20;
+}
+
+.project-container .content h1{
+    font-size: 1.20em;
+    margin: 0;
+}
+
+.project-container .content h2{
+    font-size: 1.15em;
+    margin: 0;
+}
+
+.project-container .content h3{
+    font-size: 1.10em;
+    margin: 0;
+}
+
+.project-container .content h4{
+    font-size: 1.05em;
+    margin: 0;
+}
+
+#search {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 30px 0 rgba(0, 0, 0, 0.19);
+    padding-bottom: 15px;
+}
+
+#search input {
+    padding: 10px;
+    font-size: 1.2em;
+
+    border-width: 0px;
+
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
+    z-index: 10;
+
+    border-bottom-width: 1px;
+    border-color: #ABA7A7;
+}
+
+#search #choice a:first-child{
+    margin-left: 10px;
+}
+
+#search #choice a {
+    margin-top: 10px;
+    display: inline-block;
+
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#search #choice a.selected{
+    font-weight: bold;
+}
+
+#search ul {
+    margin: 0px;
+    padding: 0px;
+    padding-left: 10px;
+    margin-top: 10px;
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#search li {
+    line-height: 1.4em;
+    font-size: 0.8em;
+    list-style: none;
+    width: 300px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+#search li.selected {
+    list-style: circle;
+}
+
+#search li:hover {
+    list-style: disc;
+}
+
+#search li a {
+    color: black;
+    display: inline-block;
+    overflow: hidden;              /* "overflow"-Wert darf nicht "visible" sein */
+
+    text-decoration: none;
+    text-overflow: ellipsis;
+
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 100%;
+}
+
+/***
+A N I M A T I O N S
+***/
+
+.content {
+    animation: slideUp 0.15s ease-out;
+}
+
+.background {
+    animation: fadeIn 0.1s ease-out;
+}
+
+#search li{
+    animation: fadeIn 0.2s ease-out;
+}
+
+#search #choice a.selected{
+    animation: moveUp 0.2s ease-out;
+    transform: translateY(-3px);
+}
+
+@keyframes moveUp {
+    0% {
+         transform: translateY(0px) ;
+    }
+    100% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+         transform: translateY(-3px) ;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px) scale(.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes moveLeft {
+    0% {
+                opacity: 1;
+         transform: translateX(0px) ;
+    }
+    100% {
+                opacity: 1;
+        transform: translateX(-3px);
+    }
+}

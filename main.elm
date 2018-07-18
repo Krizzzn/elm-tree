@@ -141,11 +141,19 @@ update msg model =
                 ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing }, Cmd.none )
 
             Msg.KeyMsg code ->
-                case ( code, search.highlight ) of
-                    ( 13, 0 ) ->
-                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = "", projects = [], highlight = 0 } }, Cmd.none )
+                case ( code, search.highlight, List.length search.projects ) of
+                    ( 13, _, 1 ) ->
+                        case List.head search.projects of
+                            Just project ->
+                                update (Msg.ChangeSelection project.id) model
 
-                    ( 13, _ ) ->
+                            Nothing ->
+                                update (Msg.DoNothing) model
+
+                    ( 13, 0, _ ) ->
+                        update (Msg.DoNothing) model
+
+                    ( 13, _, _ ) ->
                         let
                             selected =
                                 List.head <|
@@ -159,16 +167,16 @@ update msg model =
                                 Nothing ->
                                     update (Msg.DoNothing) model
 
-                    ( 27, _ ) ->
+                    ( 27, _, _ ) ->
                         ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = "", projects = [], highlight = 0, searchPrefix = "" } }, Cmd.none )
 
-                    ( 38, _ ) ->
+                    ( 38, _, _ ) ->
                         ( { model | search = { search | highlight = (Basics.max 0 (search.highlight - 1)) } }, Cmd.none )
 
-                    ( 40, _ ) ->
+                    ( 40, _, _ ) ->
                         ( { model | search = { search | highlight = (Basics.min limitSearchResult (search.highlight + 1)) } }, Cmd.none )
 
-                    ( _, _ ) ->
+                    ( _, _, _ ) ->
                         ( model, Cmd.none )
 
             Msg.DoNothing ->
@@ -306,7 +314,7 @@ renderSearch model =
     div [ id "search" ]
         [ input [ onInput Msg.Search, value model.search.searchString, placeholder "filter" ] []
         , renderChoices model.search.searchPrefix
-        , renderSearchResult model.search.projects model.search.highlight
+        , renderSearchResult model.search
         ]
 
 
@@ -330,11 +338,14 @@ renderChoices selected =
                 ]
 
 
-renderSearchResult : List Node -> Int -> Html Msg
-renderSearchResult nodes selected =
-    ul [] <|
-        List.indexedMap (renderNodeInFinder selected) <|
-            sortedNodes nodes
+renderSearchResult : Search -> Html Msg
+renderSearchResult search =
+    if List.length search.projects > 0 then
+        ul [ class "shown" ] <|
+            List.indexedMap (renderNodeInFinder search.highlight) <|
+                sortedNodes search.projects
+    else
+        text ""
 
 
 sortedNodes : List Node -> List Node

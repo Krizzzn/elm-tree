@@ -56,6 +56,9 @@ var Graph = function(tree) {
     var node = tree.nodes[i];
     node.label = "[" + node.id + "] " + node.name;
 
+    if (node.description)
+        node.label += "\n▶▶▶";
+
     var type = (typeEx.exec(node.id) || ["any"])[0];
     setNodeStyle(node, type);
   }
