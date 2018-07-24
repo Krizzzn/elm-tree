@@ -255,7 +255,12 @@ displayModel model =
                 , currentPath = Graph.filterGraph model.graph currentPath
             }
     in
-        ( newModel, JsGraph.tree newModel.currentPath )
+        case state of
+            Ready ->
+                ( newModel, JsGraph.tree newModel.currentPath )
+
+            _ ->
+                ( newModel, Cmd.none )
 
 
 
