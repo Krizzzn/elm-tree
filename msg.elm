@@ -4,6 +4,7 @@ import StaticData exposing (Edge, Node)
 import Navigation
 import Keyboard
 import Http
+import Date exposing (Date)
 
 
 type Msg
@@ -17,3 +18,5 @@ type Msg
     | NodesLoaded (Result Http.Error (List Node))
     | Search String
     | SearchPrefix String
+    | ChangeYear (Maybe Int)
+    | CurrentYear Date

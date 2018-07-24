@@ -66,10 +66,11 @@ getJsonData q =
 
 decodeNode : JD.Decoder Node
 decodeNode =
-    JD.map3 Node
+    JD.map4 Node
         (JD.at [ "NodeId" ] string)
         (JD.at [ "Name" ] string)
         (JD.maybe <| JD.at [ "Longdescription" ] string)
+        (JD.maybe <| JD.at [ "FiscalYear" ] int)
 
 
 decodeEdge : JD.Decoder Edge

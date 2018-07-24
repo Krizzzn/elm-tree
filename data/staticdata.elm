@@ -5,6 +5,7 @@ type alias Node =
     { id : String
     , name : String
     , description : Maybe String
+    , year : Maybe Int
     }
 
 
@@ -16,77 +17,77 @@ type alias Edge =
 
 projects : List Node
 projects =
-    [ { id = "NC1", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC2", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC3", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC4", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC5", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC6", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC7", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC8", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC9", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC10", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC11", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC12", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC13", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC14", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC15", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC16", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC17", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC18", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC19", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC20", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC23", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC24", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC25", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC26", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC27", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC28", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC29", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC30", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC31", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC32", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC33", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC35", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC36", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC37", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC38", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC39", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC40", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC41", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC42", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "NC43", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF1", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF2", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF3", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF4", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF5", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF6", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF7", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF8", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF9", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF10", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF11", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF12", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF13", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF14", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF15", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF16", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF17", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF18", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF19", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF20", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF21", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF22", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF23", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "CSF24", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "SO1", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "SO2", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "SO3", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "SO4", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "SO5", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "SO6", name = "???", description = Maybe.Just "mysterious node" }
-    , { id = "VISION", name = "???", description = Maybe.Just "mysterious node" }
+    [ { id = "NC1", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC2", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC3", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC4", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC5", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC6", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC7", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC8", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC9", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC10", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC11", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC12", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC13", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC14", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC15", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC16", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC17", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC18", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC19", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC20", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC23", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC24", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC25", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC26", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC27", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC28", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC29", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC30", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC31", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC32", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC33", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC35", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC36", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC37", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC38", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC39", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC40", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC41", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC42", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "NC43", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF1", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF2", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF3", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF4", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF5", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF6", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF7", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF8", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF9", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF10", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF11", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF12", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF13", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF14", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF15", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF16", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF17", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF18", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF19", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF20", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF21", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF22", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF23", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "CSF24", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "SO1", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "SO2", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "SO3", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "SO4", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "SO5", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "SO6", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
+    , { id = "VISION", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing }
     ]
 
 

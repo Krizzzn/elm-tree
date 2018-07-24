@@ -16,6 +16,22 @@ type GraphPath
         }
 
 
+highlightYear : Maybe Int -> Graph -> Graph
+highlightYear year graph =
+    let
+        selected =
+            List.map
+                (\n ->
+                    if n.year == year then
+                        n
+                    else
+                        { n | year = Maybe.Nothing }
+                )
+                graph.nodes
+    in
+        { graph | nodes = selected }
+
+
 reverseGraph : Graph -> Graph
 reverseGraph graph =
     { nodes = graph.nodes

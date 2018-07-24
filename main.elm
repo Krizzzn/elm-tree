@@ -8,7 +8,6 @@ import Html exposing (Html)
 import Html exposing (..)
 import Html.Events as HEvent exposing (..)
 import Html.Attributes as HAttr exposing (..)
-import Time exposing (Time, second)
 import List exposing (..)
 import StaticData exposing (..)
 import Graph exposing (..)
@@ -19,6 +18,8 @@ import Markdown
 import Keyboard
 import Msg exposing (Msg)
 import Sharepoint
+import Date exposing (now, year)
+import Task exposing (Task)
 
 
 main =
@@ -54,6 +55,8 @@ type alias Model =
     , currentPath : Graph
     , showDescription : Maybe String
     , highlightNode : Maybe String
+    , highlightYear : Maybe Int
+    , currentYear : Int
     , state : State
     , search : Search
     }
@@ -83,6 +86,8 @@ init location =
             , currentPath = Graph.filterGraph defaultgraph currentPath
             , showDescription = Maybe.Nothing
             , highlightNode = Maybe.Nothing
+            , highlightYear = Maybe.Nothing
+            , currentYear = 2000
             , state = Loading
             , search =
                 { searchString = ""
@@ -92,7 +97,13 @@ init location =
                 }
             }
     in
-        ( default, Cmd.batch [ Sharepoint.getJsonData Sharepoint.Edges, Sharepoint.getJsonData Sharepoint.Nodes ] )
+        ( default
+        , Cmd.batch
+            [ Sharepoint.getJsonData Sharepoint.Edges
+            , Sharepoint.getJsonData Sharepoint.Nodes
+            , Task.perform Msg.CurrentYear Date.now
+            ]
+        )
 
 
 
@@ -125,7 +136,7 @@ update msg model =
                     newModel =
                         { model
                             | location = location
-                            , currentPath = Graph.filterGraph model.graph newSelection
+                            , currentPath = prepareView model.graph newSelection model.highlightYear
                             , showDescription = Maybe.Nothing
                         }
                 in
@@ -226,6 +237,22 @@ update msg model =
             Msg.SearchPrefix find ->
                 update (Msg.Search search.searchString) <| { model | search = { search | searchPrefix = find } }
 
+            Msg.ChangeYear year ->
+                let
+                    newmodel =
+                        { model | highlightYear = year }
+                in
+                    displayModel newmodel
+
+            Msg.CurrentYear date ->
+                ( { model | currentYear = (year date) + 1 }, Cmd.none )
+
+
+prepareView : Graph -> String -> Maybe Int -> Graph
+prepareView graph path year =
+    Graph.highlightYear year <|
+        Graph.filterGraph graph path
+
 
 filterProjects : Search -> Graph -> List Node
 filterProjects search graph =
@@ -252,7 +279,7 @@ displayModel model =
         newModel =
             { model
                 | state = state
-                , currentPath = Graph.filterGraph model.graph currentPath
+                , currentPath = prepareView model.graph currentPath model.highlightYear
             }
     in
         case state of
@@ -283,10 +310,35 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     div [ id "container" ]
-        [ h1 [] [ text "Strategy" ]
+        [ renderYearPick model
         , renderLoadingBar
         , renderNetwork model
         ]
+
+
+renderYearPick : Model -> Html Msg
+renderYearPick model =
+    let
+        selectedYear =
+            Maybe.withDefault model.currentYear model.highlightYear
+
+        years =
+            [ ( selectedYear - 1, "◄" ), ( selectedYear + 1, "►" ) ]
+                |> List.filter (\( y, _ ) -> y > (model.currentYear - 2))
+                |> List.filter (\( y, _ ) -> y < (model.currentYear + 4))
+    in
+        div []
+            [ h1 []
+                [ text "Strategy"
+                , text " - "
+                , text (toString selectedYear)
+                ]
+            , div [ class "yearpick" ]
+                (List.map
+                    (\( y, label ) -> a [ onClick (Msg.ChangeYear (Maybe.Just y)) ] [ text label ])
+                    years
+                )
+            ]
 
 
 loadingAnimation : Model -> Html Msg

@@ -48,6 +48,10 @@ var Graph = function(tree) {
       node.color = colors.coolgray11;
       break;
     }
+    if (node.year){
+        node.borderWidth = node.borderWidthSelected = 4;
+        node.margin = 25;
+    }
   }
 
   var typeEx = /^[A-Z]+/;
