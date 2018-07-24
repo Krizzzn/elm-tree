@@ -31,14 +31,6 @@ render dimensions graph =
 
         edgify =
             getEdges graph graphify
-
-        bff =
-            List.map (\a -> a.node.id) graphify
-                |> Debug.log "debug 70:"
-
-        bfsf =
-            List.map (\a -> a) edgify
-                |> Debug.log "debug 72:"
     in
         svg [ SAttr.width (first dimensions), SAttr.height (second dimensions), SAttr.viewBox ("0 0 " ++ (first dimensions) ++ " " ++ (second dimensions) ++ "") ] <|
             renderNodes graphify

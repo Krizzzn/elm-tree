@@ -278,7 +278,9 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     div [ id "container" ]
-        [ renderNetwork model
+        [ h1 [] [ text "Strategy" ]
+        , renderLoadingBar
+        , renderNetwork model
         ]
 
 
@@ -297,6 +299,16 @@ loadingAnimation model =
 
             Ready ->
                 text ""
+
+
+renderLoadingBar : Html Msg
+renderLoadingBar =
+    div [ id "loadingBar" ]
+        [ div
+            [ id "border" ]
+            [ div [ id "bar" ] []
+            ]
+        ]
 
 
 renderNetwork : Model -> Html Msg

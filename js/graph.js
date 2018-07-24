@@ -157,4 +157,32 @@ var Graph = function(tree) {
       app.ports.showNode.send(nodeId);
     }, 100);
   });
+
+  if (edges.length > 35) // only show loading bar if some amount of edges are shown.
+  {
+    network.on("stabilizationProgress", function(params) {
+
+      document.getElementById('bar').style.display = 'block';
+      document.getElementById('loadingBar').style.opacity = 1;
+      document.getElementById('loadingBar').style.display = 'block';
+
+      var maxWidth = 496;
+      var minWidth = 20;
+      var widthFactor = params.iterations/params.total;
+      var width = Math.max(minWidth,maxWidth * widthFactor);
+
+      document.getElementById('bar').style.width = width + 'px';
+    });
+
+    network.on("stabilizationIterationsDone", function() {
+      document.getElementById('bar').style.width = '496px';
+      document.getElementById('loadingBar').style.opacity = 0;
+      setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 300);
+    });
+  }
+  else
+  {
+    document.getElementById('loadingBar').style.display = 'none';
+  }
+
 };
