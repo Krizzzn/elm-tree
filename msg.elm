@@ -20,4 +20,5 @@ type Msg
     | SearchPrefix String
     | ChangeYear (Maybe Int)
     | CurrentYear Date
+    | FocusYear Bool
     | HeroImageError

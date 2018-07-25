@@ -49,6 +49,9 @@ update msg model =
     let
         search =
             model.search
+
+        modelyear =
+            model.year
     in
         case msg of
             Msg.ChangeSelection newSelection ->
@@ -120,9 +123,6 @@ update msg model =
                     ( _, _, _ ) ->
                         ( model, Cmd.none )
 
-            Msg.DoNothing ->
-                ( model, Cmd.none )
-
             Msg.EdgesLoaded (Ok edges) ->
                 let
                     graph =
@@ -170,7 +170,7 @@ update msg model =
             Msg.ChangeYear year ->
                 let
                     newmodel =
-                        { model | highlightYear = year }
+                        { model | year = { modelyear | highlight = year } }
                 in
                     displayModel newmodel
 
@@ -179,10 +179,20 @@ update msg model =
                     y =
                         (Basics.min (year date + 1) 2019)
                 in
-                    ( { model | currentYear = y, highlightYear = Maybe.Just y }, Cmd.none )
+                    ( { model | year = { modelyear | current = y, highlight = Maybe.Just y } }, Cmd.none )
+
+            Msg.FocusYear focus ->
+                let
+                    newmodel =
+                        { model | year = { modelyear | focus = focus } }
+                in
+                    displayModel newmodel
 
             Msg.HeroImageError ->
                 ( { model | displayImage = False }, Cmd.none )
+
+            Msg.DoNothing ->
+                ( model, Cmd.none )
 
 
 filterProjects : Search -> Graph -> List Node
@@ -210,7 +220,7 @@ displayModel model =
         newModel =
             { model
                 | state = state
-                , currentPath = prepareView model.graph currentPath model.highlightYear
+                , currentPath = prepareView model currentPath
             }
     in
         case state of
@@ -221,10 +231,14 @@ displayModel model =
                 ( newModel, Cmd.none )
 
 
-prepareView : Graph -> String -> Maybe Int -> Graph
-prepareView graph path year =
-    Graph.highlightYear year <|
-        Graph.filterGraph graph path
+prepareView : Model -> String -> Graph
+prepareView model currentPath =
+    Graph.filterGraph currentPath model.graph
+        |> Graph.highlightYear model.year.highlight
+        |> if model.year.focus then
+            Graph.filter (\n -> n.year == model.year.highlight)
+           else
+            (\g -> g)
 
 
 

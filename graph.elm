@@ -1,4 +1,4 @@
-module Graph exposing (..)
+module Graph exposing (Graph, highlightYear, filter, findNodeById, findNodesById, findNodesByString, filterGraph, idExists)
 
 import StaticData exposing (..)
 
@@ -16,13 +16,22 @@ type GraphPath
         }
 
 
+filter : (Node -> Bool) -> Graph -> Graph
+filter fn graph =
+    filterGraphByIds graph <|
+        List.map (\n -> n.id) <|
+            List.filter fn graph.nodes
+
+
 highlightYear : Maybe Int -> Graph -> Graph
 highlightYear year graph =
     let
         selected =
             List.map
                 (\n ->
-                    if n.year == year then
+                    if n.year == Maybe.Just 0 then
+                        { n | year = year }
+                    else if n.year == year then
                         n
                     else
                         { n | year = Maybe.Nothing }
@@ -46,15 +55,20 @@ reverseNode edge =
     }
 
 
-filterGraph : Graph -> String -> Graph
-filterGraph graph id =
+filterGraph : String -> Graph -> Graph
+filterGraph id graph =
     let
         ids =
             vistGraph graph [ id ] ++ vistGraph (reverseGraph graph) [ id ]
     in
-        { nodes = List.filter (\n -> List.member n.id ids) graph.nodes
-        , edges = List.filter (\n -> List.member n.from ids) graph.edges
-        }
+        filterGraphByIds graph ids
+
+
+filterGraphByIds : Graph -> List String -> Graph
+filterGraphByIds graph ids =
+    { nodes = List.filter (\n -> List.member n.id ids) graph.nodes
+    , edges = List.filter (\n -> List.member n.from ids) graph.edges
+    }
 
 
 vistGraph : Graph -> List String -> List String

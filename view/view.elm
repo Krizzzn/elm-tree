@@ -11,12 +11,13 @@ import Msg exposing (..)
 import Sharepoint
 import SearchView exposing (renderSearch)
 import LongdescriptionView exposing (renderLongdescription)
+import HeaderView exposing (renderYearPick)
 
 
 view : Model -> Html Msg
 view model =
     div [ id "container" ]
-        [ renderYearPick model
+        [ renderYearPick model.year
         , renderLoadingBar
         , renderNetwork model
         ]
@@ -37,32 +38,6 @@ loadingAnimation model =
 
             Ready ->
                 text ""
-
-
-renderYearPick : Model -> Html Msg
-renderYearPick model =
-    let
-        selectedYear =
-            Maybe.withDefault model.currentYear model.highlightYear
-
-        years =
-            [ ( selectedYear - 1, "◄" ), ( selectedYear + 1, "►" ) ]
-                |> List.filter (\( y, _ ) -> y > (model.currentYear - 2))
-                |> List.filter (\( y, _ ) -> y < (model.currentYear + 4))
-    in
-        header []
-            [ h1 []
-                [ text "Strategy"
-                , text " - "
-                , text (toString selectedYear)
-                ]
-            , div [ class "yearpick" ]
-                (List.map
-                    (\( y, label ) -> a [ onClick (Msg.ChangeYear (Maybe.Just y)) ] [ text label ])
-                    years
-                )
-            , div [ class "clearfix" ] []
-            ]
 
 
 renderLoadingBar : Html Msg

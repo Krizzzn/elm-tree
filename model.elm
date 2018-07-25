@@ -20,7 +20,7 @@ type alias Search =
 
 
 type alias Year =
-    { focus : Maybe Int
+    { focus : Bool
     , highlight : Maybe Int
     , current : Int
     }
@@ -32,8 +32,7 @@ type alias Model =
     , currentPath : Graph
     , showDescription : Maybe String
     , highlightNode : Maybe String
-    , highlightYear : Maybe Int
-    , currentYear : Int
+    , year : Year
     , state : State
     , search : Search
     , displayImage : Bool
@@ -54,8 +53,11 @@ defaultModel location =
     , currentPath = defaultgraph
     , showDescription = Maybe.Nothing
     , highlightNode = Maybe.Nothing
-    , highlightYear = Maybe.Nothing
-    , currentYear = 2000
+    , year =
+        { focus = False
+        , highlight = Maybe.Nothing
+        , current = 2000
+        }
     , state = Loading
     , search =
         { searchString = ""

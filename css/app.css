@@ -31,6 +31,12 @@ div.clearfix {
     display: none;
 }
 
+.invisible {
+    opacity: 0;
+    cursor: default;
+}
+
+
 #container > header {
     margin-top: 0px;
     padding-left: 10px;
@@ -60,6 +66,7 @@ div.clearfix {
     padding: 5px;
     margin-right: 5px;
     cursor: pointer;
+    user-select: none;
 }
 
 #container{
@@ -85,11 +92,11 @@ div.clearfix {
 }
 
 .project-container div.state.error {
-  background: url('img/error.gif') no-repeat;
+  background: url('../img/error.gif') no-repeat;
 }
 
 .project-container div.state.loading {
-  background: url('img/loading.gif') no-repeat;
+  background: url('../img/loading.gif') no-repeat;
 }
 
 .project-container #network {
