@@ -15,6 +15,16 @@ var Graph = function(tree) {
     white: "#FFFFFF"
   };
 
+  var shadeColor = function(color, percent) {
+    var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+    return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+  }
+
+  var blendColors = function(c0, c1, p) {
+    var f=parseInt(c0.slice(1),16),t=parseInt(c1.slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF,R2=t>>16,G2=t>>8&0x00FF,B2=t&0x0000FF;
+    return "#"+(0x1000000+(Math.round((R2-R1)*p)+R1)*0x10000+(Math.round((G2-G1)*p)+G1)*0x100+(Math.round((B2-B1)*p)+B1)).toString(16).slice(1);
+  }
+
   var setNodeStyle = function(node, type) {
 
     node.font = { "color": colors.white };
@@ -30,8 +40,11 @@ var Graph = function(tree) {
 
     switch (type){
       case "VISION":
-      node.mass = 100;
+      node.mass = 1000;
       node.color = colors.blue;
+      node.x = 0;
+      node.y = 0;
+      node.physics = false;
       //node.shape = "box";
       break;
       case "SO":
@@ -50,7 +63,8 @@ var Graph = function(tree) {
     }
     if (node.year){
         node.borderWidth = node.borderWidthSelected = 4;
-        node.margin = 25;
+        node.margin = 15;
+        node.color = shadeColor(node.color, -0.3)
     }
   }
 
@@ -60,8 +74,8 @@ var Graph = function(tree) {
     var node = tree.nodes[i];
     node.label = "[" + node.id + "] " + node.name;
 
-    if (node.description)
-        node.label += "\n▶▶▶";
+//    if (node.description)
+//        node.label += "\n▶▶▶";
 
     var type = (typeEx.exec(node.id) || ["any"])[0];
     setNodeStyle(node, type);
@@ -121,7 +135,9 @@ var Graph = function(tree) {
     physics: {
       enabled: true,
       hierarchicalRepulsion: {
-        nodeDistance: 220
+        nodeDistance: 220,
+        springLength: 150,
+        springConstant: 0.0005
       }
     },
     layout: {
@@ -129,7 +145,7 @@ var Graph = function(tree) {
         enabled: true,
         //nodeSpacing: 600,
         //nodeDistance: 600,
-        levelSeparation:150,
+        levelSeparation:180,
         blockShifting: false,
         edgeMinimization: false,
         direction: "DU",

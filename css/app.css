@@ -23,10 +23,11 @@ div{
     position: relative;
 }
 
-#container > h1 {
-    font-size: 18pt;
-    text-transform: uppercase;
-    letter-spacing: .45em;
+div.clearfix {
+    clear: both;
+}
+
+#container > header {
     margin-top: 0px;
     padding-left: 10px;
     padding-top: 12px;
@@ -34,6 +35,27 @@ div{
     border-bottom: 1px solid black;
     border-color: #ABA7A7;
     margin-bottom: 0px;
+}
+
+#container > header > h1 {
+    font-size: 18pt;
+    text-transform: uppercase;
+    letter-spacing: .45em;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    float:left;
+}
+
+#container > header .yearpick {
+    float:left;
+    display: inline-block;
+    padding-top: 5px;
+}
+
+#container > header .yearpick a {
+    padding: 5px;
+    margin-right: 5px;
+    cursor: pointer;
 }
 
 #container{
@@ -211,6 +233,7 @@ L O D I N G B A R
     -ms-transition: all 0.4s ease;
     -o-transition: all 0.4s ease;
     transition: all 0.4s ease;
+
     display: none;
 }
 

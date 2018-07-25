@@ -99,9 +99,9 @@ init location =
     in
         ( default
         , Cmd.batch
-            [ Sharepoint.getJsonData Sharepoint.Edges
+            [ Task.perform Msg.CurrentYear Date.now
+            , Sharepoint.getJsonData Sharepoint.Edges
             , Sharepoint.getJsonData Sharepoint.Nodes
-            , Task.perform Msg.CurrentYear Date.now
             ]
         )
 
@@ -129,18 +129,13 @@ update msg model =
 
             Msg.UrlChange location ->
                 let
-                    newSelection =
-                        getCurrentFocus model.graph <|
-                            String.dropLeft 1 location.hash
-
                     newModel =
                         { model
                             | location = location
-                            , currentPath = prepareView model.graph newSelection model.highlightYear
                             , showDescription = Maybe.Nothing
                         }
                 in
-                    ( newModel, JsGraph.tree newModel.currentPath )
+                    displayModel newModel
 
             Msg.ShowDescription nodeId ->
                 if (model.highlightNode == Maybe.Just nodeId) then
@@ -245,13 +240,11 @@ update msg model =
                     displayModel newmodel
 
             Msg.CurrentYear date ->
-                ( { model | currentYear = (year date) + 1 }, Cmd.none )
-
-
-prepareView : Graph -> String -> Maybe Int -> Graph
-prepareView graph path year =
-    Graph.highlightYear year <|
-        Graph.filterGraph graph path
+                let
+                    y =
+                        (Basics.min (year date + 1) 2019)
+                in
+                    ( { model | currentYear = y, highlightYear = Maybe.Just y }, Cmd.none )
 
 
 filterProjects : Search -> Graph -> List Node
@@ -288,6 +281,12 @@ displayModel model =
 
             _ ->
                 ( newModel, Cmd.none )
+
+
+prepareView : Graph -> String -> Maybe Int -> Graph
+prepareView graph path year =
+    Graph.highlightYear year <|
+        Graph.filterGraph graph path
 
 
 
@@ -327,7 +326,7 @@ renderYearPick model =
                 |> List.filter (\( y, _ ) -> y > (model.currentYear - 2))
                 |> List.filter (\( y, _ ) -> y < (model.currentYear + 4))
     in
-        div []
+        header []
             [ h1 []
                 [ text "Strategy"
                 , text " - "
@@ -338,6 +337,7 @@ renderYearPick model =
                     (\( y, label ) -> a [ onClick (Msg.ChangeYear (Maybe.Just y)) ] [ text label ])
                     years
                 )
+            , div [ class "clearfix" ] []
             ]
 
 
