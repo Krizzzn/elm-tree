@@ -20,6 +20,7 @@ import Msg exposing (Msg)
 import Sharepoint
 import Date exposing (now, year)
 import Task exposing (Task)
+import Json.Decode exposing (succeed)
 
 
 main =
@@ -95,6 +96,7 @@ init location =
                 , highlight = 0
                 , searchPrefix = ""
                 }
+            , displayImage = True
             }
     in
         ( default
@@ -133,6 +135,7 @@ update msg model =
                         { model
                             | location = location
                             , showDescription = Maybe.Nothing
+                            , displayImage = True
                         }
                 in
                     displayModel newModel
@@ -144,7 +147,7 @@ update msg model =
                     ( { model | highlightNode = Maybe.Just nodeId }, Cmd.none )
 
             Msg.HideDescription ->
-                ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing }, Cmd.none )
+                ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, displayImage = True }, Cmd.none )
 
             Msg.KeyMsg code ->
                 case ( code, search.highlight, List.length search.projects ) of
@@ -174,7 +177,7 @@ update msg model =
                                     update (Msg.DoNothing) model
 
                     ( 27, _, _ ) ->
-                        ( { model | showDescription = Maybe.Nothing, highlightNode = Maybe.Nothing, search = { search | searchString = "", projects = [], highlight = 0, searchPrefix = "" } }, Cmd.none )
+                        ( { model | showDescription = Maybe.Nothing, displayImage = True, highlightNode = Maybe.Nothing, search = { search | searchString = "", projects = [], highlight = 0, searchPrefix = "" } }, Cmd.none )
 
                     ( 38, _, _ ) ->
                         ( { model | search = { search | highlight = (Basics.max 0 (search.highlight - 1)) } }, Cmd.none )
@@ -245,6 +248,9 @@ update msg model =
                         (Basics.min (year date + 1) 2019)
                 in
                     ( { model | currentYear = y, highlightYear = Maybe.Just y }, Cmd.none )
+
+            Msg.HeroImageError ->
+                ( { model | displayImage = False }, Cmd.none )
 
 
 filterProjects : Search -> Graph -> List Node
@@ -373,7 +379,7 @@ renderNetwork model =
     div [ class "project-container" ]
         [ loadingAnimation model
         , div [ id "network" ] []
-        , renderLongdescription model.graph model.showDescription
+        , renderLongdescription model.graph model.showDescription model.displayImage
         , renderSearch model
         ]
 
@@ -438,19 +444,19 @@ renderNodeInFinder selected idx node =
             ]
 
 
-renderLongdescription : Graph -> Maybe String -> Html Msg
-renderLongdescription graph maybeNodeId =
+renderLongdescription : Graph -> Maybe String -> Bool -> Html Msg
+renderLongdescription graph maybeNodeId showImage =
     case maybeNodeId of
         Maybe.Nothing ->
             Html.text ""
 
         Maybe.Just node ->
             Graph.findNodeById graph node
-                |> renderLongdescriptionOfNode
+                |> renderLongdescriptionOfNode showImage
 
 
-renderLongdescriptionOfNode : Maybe Node -> Html Msg
-renderLongdescriptionOfNode maybeNode =
+renderLongdescriptionOfNode : Bool -> Maybe Node -> Html Msg
+renderLongdescriptionOfNode showImage maybeNode =
     case maybeNode of
         Maybe.Nothing ->
             Html.text ""
@@ -461,9 +467,25 @@ renderLongdescriptionOfNode maybeNode =
                     Html.text ""
 
                 Just _ ->
-                    Html.div [ class "background", onClick Msg.HideDescription ]
-                        [ Markdown.toHtml [ class "content" ] (renderNodeAsMarkdown node)
-                        ]
+                    let
+                        showImageClass =
+                            "hero"
+                                ++ if showImage then
+                                    ""
+                                   else
+                                    " hidden"
+                    in
+                        Html.div [ class "background", onClick Msg.HideDescription ]
+                            [ div
+                                [ class "content" ]
+                                [ div [ class showImageClass ]
+                                    [ img [ src (Sharepoint.getImageUrl node.id), on "error" (succeed Msg.HeroImageError) ] []
+                                    ]
+                                , Markdown.toHtml
+                                    [ class "markdown" ]
+                                    (renderNodeAsMarkdown node)
+                                ]
+                            ]
 
 
 renderNodeAsMarkdown : Node -> String

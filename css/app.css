@@ -27,6 +27,10 @@ div.clearfix {
     clear: both;
 }
 
+.hidden {
+    display: none;
+}
+
 #container > header {
     margin-top: 0px;
     padding-left: 10px;
@@ -133,6 +137,23 @@ div.clearfix {
 .project-container .content h4{
     font-size: 1.05em;
     margin: 0;
+}
+
+.project-container .content {
+    float: left;
+}
+
+.project-container .hero {
+    float: left;
+    margin-right: 20px;
+}
+
+.project-container .markdown {
+    overflow: hidden;
+}
+
+.project-container .hero img {
+    width: 200px;
 }
 
 #search {

@@ -24,6 +24,11 @@ getEndpointUrl service =
         "/_vti_bin/listdata.svc/" ++ service
 
 
+getImageUrl : String -> String
+getImageUrl nodeId =
+    "/" ++ nodeId ++ ".jpg"
+
+
 getServiceUrl : Query -> String
 getServiceUrl q =
     case q of

@@ -1,3 +1,5 @@
 elm-stuff
 *.sublime-workspace
 dist/*
+js/app.js
+img/*.gif

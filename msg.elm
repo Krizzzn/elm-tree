@@ -20,3 +20,4 @@ type Msg
     | SearchPrefix String
     | ChangeYear (Maybe Int)
     | CurrentYear Date
+    | HeroImageError
