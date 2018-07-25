@@ -1,0 +1,67 @@
+module Model exposing (State(..), Search, Year, Model, defaultModel)
+
+import StaticData exposing (Node)
+import Navigation exposing (..)
+import Graph exposing (..)
+
+
+type State
+    = Loading
+    | Error
+    | Ready
+
+
+type alias Search =
+    { searchString : String
+    , projects : List Node
+    , highlight : Int
+    , searchPrefix : String
+    }
+
+
+type alias Year =
+    { focus : Maybe Int
+    , highlight : Maybe Int
+    , current : Int
+    }
+
+
+type alias Model =
+    { graph : Graph
+    , location : Navigation.Location
+    , currentPath : Graph
+    , showDescription : Maybe String
+    , highlightNode : Maybe String
+    , highlightYear : Maybe Int
+    , currentYear : Int
+    , state : State
+    , search : Search
+    , displayImage : Bool
+    }
+
+
+defaultgraph : Graph
+defaultgraph =
+    { nodes = []
+    , edges = []
+    }
+
+
+defaultModel : Navigation.Location -> Model
+defaultModel location =
+    { graph = defaultgraph
+    , location = location
+    , currentPath = defaultgraph
+    , showDescription = Maybe.Nothing
+    , highlightNode = Maybe.Nothing
+    , highlightYear = Maybe.Nothing
+    , currentYear = 2000
+    , state = Loading
+    , search =
+        { searchString = ""
+        , projects = []
+        , highlight = 0
+        , searchPrefix = ""
+        }
+    , displayImage = True
+    }

@@ -6,7 +6,8 @@
     "source-directories": [
         ".",
         "./data",
-        "./render"
+        "./render",
+        "./view"
     ],
     "exposed-modules": [],
     "dependencies": {
