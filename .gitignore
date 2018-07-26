@@ -3,3 +3,4 @@ elm-stuff
 dist/*
 js/app.js
 img/*.gif
+json/hero/*
