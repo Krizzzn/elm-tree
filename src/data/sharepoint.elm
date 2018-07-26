@@ -4,11 +4,7 @@ import Http
 import Msg exposing (Msg)
 import Json.Decode as JD exposing (field, Decoder, int, string)
 import StaticData exposing (Edge, Node)
-
-
-local : Bool
-local =
-    True
+import Config exposing (local)
 
 
 type Query
@@ -19,14 +15,17 @@ type Query
 getEndpointUrl : String -> String
 getEndpointUrl service =
     if local then
-        "/json/" ++ service ++ ".json"
+        "json/" ++ service ++ ".json"
     else
         "/_vti_bin/listdata.svc/" ++ service
 
 
 getImageUrl : String -> String
 getImageUrl nodeId =
-    "/" ++ nodeId ++ ".jpg"
+    if local then
+        "json/hero/" ++ nodeId ++ ".jpg"
+    else
+        "/" ++ nodeId ++ ".jpg"
 
 
 getServiceUrl : Query -> String

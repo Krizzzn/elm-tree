@@ -1,6 +1,6 @@
 elm-stuff
 *.sublime-workspace
 dist/*
-js/app.js
-img/*.gif
-json/hero/*
+webroot/js/app.js
+webroot/img/*.gif
+webroot/json/hero/*

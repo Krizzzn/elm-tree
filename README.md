@@ -1,4 +1,4 @@
 elm-tree
 
-`elm-live Main.elm --output=js/app.js --open --port=8001`
+`elm-live src/Main.elm --output=webroot/js/app.js --open --port=8001`
 

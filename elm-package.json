@@ -1,13 +1,14 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
-    "repository": "https://github.com/user/project.git",
+    "summary": "Display a strategy map as graph.",
+    "repository": "https://github.com/krizzzn/elm-tree.git",
     "license": "BSD3",
     "source-directories": [
-        ".",
-        "./data",
-        "./render",
-        "./view"
+        "./src",
+        "./src/data",
+        "./src/render",
+        "./src/view",
+        "./src/config"
     ],
     "exposed-modules": [],
     "dependencies": {
