@@ -62,7 +62,7 @@ update msg model =
                     location =
                         { m | hash = "#" ++ newSelection }
                 in
-                    ( model, Navigation.modifyUrl (location.pathname ++ location.hash) )
+                    ( model, Navigation.newUrl (location.pathname ++ location.hash) )
 
             Msg.UrlChange location ->
                 let
