@@ -14,7 +14,7 @@ import Task exposing (Task)
 import Model exposing (State(..), Search, Year, Model, defaultModel)
 import View exposing (view)
 import SearchView exposing (renderSearch, limitSearchResult, sortedNodes)
-
+import Wayfinder exposing (..)
 
 main =
     Navigation.program Msg.UrlChange
@@ -24,7 +24,7 @@ main =
         , subscriptions = subscriptions
         }
 
-
+--http://localhost:8001/webroot/main.html#PRJ26
 
 -- MODEL
 
@@ -86,6 +86,17 @@ update msg model =
 
             Msg.KeyMsg code ->
                 case ( code, search.highlight, List.length search.projects ) of
+
+                    ( 65, _, _) -> let
+
+                        running =  Wayfinder.traverse {from = "PRJ04", to = "SO6"} model.currentPath.edges
+                        _ =
+                            Debug.log "trav" running
+                    in
+
+
+                        ( model, Cmd.none )
+
                     ( 13, _, 1 ) ->
                         case List.head search.projects of
                             Just project ->

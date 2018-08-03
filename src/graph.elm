@@ -6,14 +6,11 @@ import StaticData exposing (..)
 type alias Graph =
     { nodes : List Node
     , edges : List Edge
+    , filter : List Edge
     }
 
 
-type GraphPath
-    = GraphPath
-        { node : Node
-        , sub : List GraphPath
-        }
+
 
 
 filter : (Node -> Bool) -> Graph -> Graph
@@ -45,6 +42,7 @@ reverseGraph : Graph -> Graph
 reverseGraph graph =
     { nodes = graph.nodes
     , edges = List.map reverseNode graph.edges
+    , filter = graph.filter
     }
 
 
@@ -68,6 +66,7 @@ filterGraphByIds : Graph -> List String -> Graph
 filterGraphByIds graph ids =
     { nodes = List.filter (\n -> List.member n.id ids) graph.nodes
     , edges = List.filter (\n -> List.member n.from ids) graph.edges
+    , filter = graph.filter
     }
 
 
@@ -92,25 +91,6 @@ vistGraph graph ids =
 filterNewIds : List String -> List String -> List String
 filterNewIds list1 list2 =
     List.filter (\e -> not <| List.member e list1) list2
-
-
-pathify : Graph -> Node -> GraphPath
-pathify graph node =
-    let
-        findNodesFromGraph =
-            findNodesByEdge graph
-
-        pathifyGraph =
-            pathify graph
-    in
-        GraphPath
-            { node = node
-            , sub = []
-
-            --findEdgesByNode graph node
-            --    |> List.concatMap findNodesFromGraph
-            --    |> List.map pathifyGraph
-            }
 
 
 idExists : Graph -> String -> Bool
@@ -180,3 +160,4 @@ filterNode find node =
             String.contains needle (String.toLower (n.name ++ " " ++ n.id))
     in
         List.all (matchNode node) findAtoms
+
