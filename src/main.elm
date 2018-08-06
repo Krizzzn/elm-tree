@@ -86,17 +86,6 @@ update msg model =
 
             Msg.KeyMsg code ->
                 case ( code, search.highlight, List.length search.projects ) of
-
-                    ( 65, _, _) -> let
-
-                        running =  Wayfinder.traverse {from = "PRJ04", to = "SO6"} model.currentPath.edges
-                        _ =
-                            Debug.log "trav" running
-                    in
-
-
-                        ( model, Cmd.none )
-
                     ( 13, _, 1 ) ->
                         case List.head search.projects of
                             Just project ->
@@ -139,8 +128,11 @@ update msg model =
                     graph =
                         model.graph
 
+                    parts =
+                        List.partition (\e -> e.edgetype == Maybe.Just "filter") edges
+
                     newmodel =
-                        { model | graph = { graph | edges = edges } }
+                        { model | graph = { graph | edges = (Tuple.second parts), filter = (Tuple.first parts) } }
                 in
                     displayModel newmodel
 
@@ -231,7 +223,7 @@ displayModel model =
         newModel =
             { model
                 | state = state
-                , currentPath = prepareView model currentPath
+                , currentPath = prepareView2 model currentPath
             }
     in
         case state of
@@ -240,6 +232,21 @@ displayModel model =
 
             _ ->
                 ( newModel, Cmd.none )
+
+
+prepareView2 : Model -> String -> Graph
+prepareView2 model currentPath =
+    let
+        targets =
+            List.filter (\e -> e.from == currentPath) model.graph.filter
+    in
+        if (List.any (\e -> e.from == currentPath) model.graph.filter) then
+            Graph.filterGraphByIdsAndType model.graph <|
+                Wayfinder.ids targets <|
+                    Wayfinder.traverseGraph targets <|
+                        prepareView model currentPath
+        else
+            prepareView model currentPath
 
 
 prepareView : Model -> String -> Graph

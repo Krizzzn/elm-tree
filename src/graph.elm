@@ -1,4 +1,4 @@
-module Graph exposing (Graph, highlightYear, filter, findNodeById, findNodesById, findNodesByString, filterGraph, idExists)
+module Graph exposing (Graph, highlightYear, filter, findNodeById, findNodesById, findNodesByString, filterGraph, filterGraphByIds, filterGraphByIdsAndType, idExists)
 
 import StaticData exposing (..)
 
@@ -8,9 +8,6 @@ type alias Graph =
     , edges : List Edge
     , filter : List Edge
     }
-
-
-
 
 
 filter : (Node -> Bool) -> Graph -> Graph
@@ -50,6 +47,7 @@ reverseNode : Edge -> Edge
 reverseNode edge =
     { from = edge.to
     , to = edge.from
+    , edgetype = edge.edgetype
     }
 
 
@@ -68,6 +66,25 @@ filterGraphByIds graph ids =
     , edges = List.filter (\n -> List.member n.from ids) graph.edges
     , filter = graph.filter
     }
+
+
+filterGraphByIdsAndType : Graph -> List String -> Graph
+filterGraphByIdsAndType graph ids =
+    let
+        other =
+            getTypesFromGraph graph
+                |> List.filter (\e -> not (List.any (\a -> (String.left 2 a) == e) ids))
+
+    in
+        { nodes = List.filter (\n -> List.member n.id ids || List.member (String.left 2 n.id) other) graph.nodes
+        , edges = List.filter (\n -> List.member n.from ids || List.member (String.left 2 n.from) other) graph.edges
+        , filter = graph.filter
+        }
+
+
+getTypesFromGraph : Graph -> List String
+getTypesFromGraph graph =
+    List.map (\e -> String.left 2 e.id) graph.nodes
 
 
 vistGraph : Graph -> List String -> List String
@@ -160,4 +177,3 @@ filterNode find node =
             String.contains needle (String.toLower (n.name ++ " " ++ n.id))
     in
         List.all (matchNode node) findAtoms
-

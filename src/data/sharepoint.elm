@@ -79,9 +79,10 @@ decodeNode =
 
 decodeEdge : JD.Decoder Edge
 decodeEdge =
-    JD.map2 Edge
+    JD.map3 Edge
         (JD.at [ "From" ] string)
         (JD.at [ "To" ] string)
+        (JD.maybe <| JD.at [ "EdgeTypeValue" ] string)
 
 
 decodeEnvelope : JD.Decoder a -> JD.Decoder a
