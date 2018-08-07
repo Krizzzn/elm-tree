@@ -1,6 +1,6 @@
 module Msg exposing (..)
 
-import StaticData exposing (Edge, Node)
+import ModelBase exposing (Edge, Node)
 import Navigation
 import Keyboard
 import Http

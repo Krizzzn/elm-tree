@@ -3,7 +3,7 @@ module Sharepoint exposing (..)
 import Http
 import Msg exposing (Msg)
 import Json.Decode as JD exposing (field, Decoder, int, string)
-import StaticData exposing (Edge, Node)
+import ModelBase exposing (Edge, Node)
 import Config exposing (local)
 import Regex exposing (split)
 

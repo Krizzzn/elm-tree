@@ -1,6 +1,6 @@
 module Graph exposing (Graph, highlightYear, filter, findNodeById, findNodesById, findNodesByString, filterGraph, filterGraphByIds, filterGraphByIdsAndType, idExists)
 
-import StaticData exposing (..)
+import ModelBase exposing (..)
 
 
 type alias Graph =

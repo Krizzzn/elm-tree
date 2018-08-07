@@ -1,6 +1,6 @@
 module Model exposing (State(..), Search, Year, Model, defaultModel)
 
-import StaticData exposing (Node)
+import ModelBase exposing (Node)
 import Navigation exposing (..)
 import Graph exposing (..)
 

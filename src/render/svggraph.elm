@@ -5,12 +5,12 @@ import Html exposing (Html)
 import Svg exposing (svg, rect)
 import Svg.Attributes as SAttr exposing (..)
 import Graph exposing (..)
-import StaticData exposing (..)
+import ModelBase exposing (Node)
 import Set exposing (..)
 
 
 type alias GraphNode =
-    { node : StaticData.Node
+    { node : Node
     , position : ( Int, Int )
     }
 

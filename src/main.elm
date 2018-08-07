@@ -1,7 +1,6 @@
 module Main exposing (..)
 
 import List exposing (..)
-import StaticData exposing (..)
 import Graph exposing (..)
 import SvgGraph exposing (..)
 import JsGraph exposing (..)
@@ -11,6 +10,7 @@ import Msg exposing (Msg)
 import Sharepoint
 import Date exposing (now, year)
 import Task exposing (Task)
+import ModelBase exposing (..)
 import Model exposing (State(..), Search, Year, Model, defaultModel)
 import View exposing (view)
 import SearchView exposing (renderSearch, limitSearchResult, sortedNodes)

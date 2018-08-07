@@ -6,7 +6,7 @@ import Html.Events as HEvent exposing (..)
 import Html.Attributes as HAttr exposing (..)
 import Msg exposing (..)
 import Model exposing (State(..), Search, Year, Model)
-import StaticData exposing (..)
+import ModelBase exposing (Node)
 import Graph exposing (..)
 
 

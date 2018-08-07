@@ -1,6 +1,6 @@
 module Wayfinder exposing (traverse, traverseGraph, flatten, ids)
 
-import StaticData exposing (..)
+import ModelBase exposing (Edge)
 import Graph exposing (Graph)
 
 

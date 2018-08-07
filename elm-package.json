@@ -8,7 +8,8 @@
         "./src/data",
         "./src/render",
         "./src/view",
-        "./src/config"
+        "./src/config",
+        "./src/graph"
     ],
     "exposed-modules": [],
     "dependencies": {
