@@ -6,6 +6,7 @@ type alias Node =
     , name : String
     , description : Maybe String
     , year : Maybe Int
+    , progress : Maybe Int
     , projectmanager : List String
     , responsiblemanager : List String
     , teammember : List String

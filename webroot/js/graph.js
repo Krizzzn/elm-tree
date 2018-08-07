@@ -25,6 +25,27 @@ var Graph = function(tree) {
     return "#"+(0x1000000+(Math.round((R2-R1)*p)+R1)*0x10000+(Math.round((G2-G1)*p)+G1)*0x100+(Math.round((B2-B1)*p)+B1)).toString(16).slice(1);
   }
 
+  var progress = function(prg) {
+    if (!prg)
+      return "";
+
+    var progress = Math.max(0, Math.min(prg, 100));
+    if (isNaN(progress))
+        return "";
+
+    var filled = Math.floor(progress / 10);
+
+    var d = ""
+    for (var i = 0; i < 10; i++) {
+        if (i < filled)
+            d += "⚫"
+        else
+            d += "⚪"
+    }
+
+    return "\n\r" +d+ " "+ Math.floor(progress) + "%";
+  }
+
   var setNodeStyle = function(node, type) {
 
     node.font = { "color": colors.white };
@@ -72,7 +93,7 @@ var Graph = function(tree) {
 
   for (var i = tree.nodes.length - 1; i >= 0; i--) {
     var node = tree.nodes[i];
-    node.label = "[" + node.id + "] " + node.name;
+    node.label = "[" + node.id + "] " + node.name + progress(node.progress)
 
 //    if (node.description)
 //        node.label += "\n▶▶▶";

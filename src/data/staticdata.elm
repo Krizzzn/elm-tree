@@ -5,77 +5,77 @@ import ModelBase exposing (Node, Edge)
 
 projects : List Node
 projects =
-    [ { id = "NC1", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC2", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC3", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC4", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC5", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC6", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC7", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC8", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC9", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC10", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC11", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC12", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC13", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC14", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC15", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC16", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC17", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC18", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC19", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC20", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC23", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC24", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC25", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC26", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC27", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC28", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC29", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC30", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC31", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC32", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC33", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC35", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC36", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC37", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC38", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC39", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC40", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC41", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC42", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "NC43", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF1", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF2", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF3", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF4", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF5", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF6", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF7", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF8", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF9", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF10", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF11", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF12", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF13", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF14", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF15", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF16", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF17", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF18", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF19", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF20", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF21", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF22", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF23", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "CSF24", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "SO1", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "SO2", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "SO3", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "SO4", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "SO5", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "SO6", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
-    , { id = "VISION", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, projectmanager = [], responsiblemanager = [], teammember = [] }
+    [ { id = "NC1", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC2", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC3", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC4", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC5", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC6", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC7", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC8", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC9", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC10", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC11", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC12", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC13", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC14", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC15", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC16", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC17", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC18", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC19", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC20", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC23", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC24", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC25", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC26", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC27", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC28", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC29", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC30", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC31", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC32", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC33", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC35", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC36", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC37", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC38", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC39", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC40", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC41", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC42", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "NC43", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF1", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF2", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF3", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF4", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF5", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF6", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF7", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF8", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF9", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF10", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF11", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF12", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF13", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF14", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF15", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF16", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF17", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF18", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF19", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF20", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF21", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF22", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF23", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "CSF24", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "SO1", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "SO2", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "SO3", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "SO4", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "SO5", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "SO6", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
+    , { id = "VISION", name = "???", description = Maybe.Just "mysterious node", year = Maybe.Nothing, progress = Maybe.Just 0, projectmanager = [], responsiblemanager = [], teammember = [] }
     ]
 
 

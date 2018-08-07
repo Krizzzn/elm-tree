@@ -71,11 +71,12 @@ getJsonData q =
 
 decodeNode : JD.Decoder Node
 decodeNode =
-    JD.map7 Node
+    JD.map8 Node
         (JD.at [ "NodeId" ] string)
         (JD.at [ "Name" ] string)
         (JD.maybe <| JD.at [ "Longdescription" ] string)
         (JD.maybe <| JD.at [ "FiscalYear" ] int)
+        (JD.at [ "Progress" ] progress)
         (JD.at [ "ProjectManager" ] people)
         (JD.at [ "ResponsibleManager" ] people)
         (JD.at [ "TeamMember" ] people)
@@ -97,6 +98,21 @@ people =
                     JD.succeed []
     in
         string |> JD.maybe |> JD.andThen convert
+
+
+progress : Decoder (Maybe Int)
+progress =
+    let
+        convert : Maybe Float -> Decoder (Maybe Int)
+        convert raw =
+            case raw of
+                Just value ->
+                    JD.succeed <| Maybe.Just <| floor <| value * 100
+
+                Nothing ->
+                    JD.succeed Maybe.Nothing
+    in
+        JD.float |> JD.maybe |> JD.andThen convert
 
 
 decodeEdge : JD.Decoder Edge

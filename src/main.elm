@@ -17,6 +17,7 @@ import View exposing (view)
 import SearchView exposing (renderSearch, limitSearchResult, sortedNodes)
 import Wayfinder exposing (..)
 
+
 main =
     Navigation.program Msg.UrlChange
         { init = init
@@ -25,8 +26,9 @@ main =
         , subscriptions = subscriptions
         }
 
---http://localhost:8001/webroot/main.html#PRJ26
 
+
+--http://localhost:8001/webroot/main.html#PRJ26
 -- MODEL
 
 
@@ -278,12 +280,23 @@ prepareViewWayfinder model currentPath =
 
 prepareViewFocus : Model -> String -> Graph
 prepareViewFocus model currentPath =
-    Graph.filterGraph currentPath model.graph
+    prepareView model currentPath
         |> Graph.highlightYear model.year.highlight
         |> if model.year.focus then
             Graph.filter (\n -> n.year == model.year.highlight)
            else
             (\g -> g)
+
+
+prepareView : Model -> String -> Graph
+prepareView model currentPath =
+    Graph.filterGraph currentPath <|
+        prepareViewCalculateProgress model currentPath
+
+
+prepareViewCalculateProgress : Model -> String -> Graph
+prepareViewCalculateProgress model currentPath =
+    GraphExtra.calculateProgressesOfLevel "NC" model.graph
 
 
 
