@@ -5,6 +5,7 @@ import Msg exposing (Msg)
 import Json.Decode as JD exposing (field, Decoder, int, string)
 import StaticData exposing (Edge, Node)
 import Config exposing (local)
+import Regex exposing (split)
 
 
 type Query
@@ -70,11 +71,32 @@ getJsonData q =
 
 decodeNode : JD.Decoder Node
 decodeNode =
-    JD.map4 Node
+    JD.map7 Node
         (JD.at [ "NodeId" ] string)
         (JD.at [ "Name" ] string)
         (JD.maybe <| JD.at [ "Longdescription" ] string)
         (JD.maybe <| JD.at [ "FiscalYear" ] int)
+        (JD.at [ "ProjectManager" ] people)
+        (JD.at [ "ResponsibleManager" ] people)
+        (JD.at [ "TeamMember" ] people)
+
+
+people : Decoder (List String)
+people =
+    let
+        convert : Maybe String -> Decoder (List String)
+        convert raw =
+            case raw of
+                Just value ->
+                    JD.succeed <|
+                        List.filter (\e -> String.length e > 0) <|
+                            List.map String.trim <|
+                                split Regex.All (Regex.regex ",|;") value
+
+                Nothing ->
+                    JD.succeed []
+    in
+        string |> JD.maybe |> JD.andThen convert
 
 
 decodeEdge : JD.Decoder Edge

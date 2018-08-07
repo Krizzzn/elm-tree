@@ -74,7 +74,6 @@ filterGraphByIdsAndType graph ids =
         other =
             getTypesFromGraph graph
                 |> List.filter (\e -> not (List.any (\a -> (String.left 2 a) == e) ids))
-
     in
         { nodes = List.filter (\n -> List.member n.id ids || List.member (String.left 2 n.id) other) graph.nodes
         , edges = List.filter (\n -> List.member n.from ids || List.member (String.left 2 n.from) other) graph.edges
@@ -171,9 +170,23 @@ filterNode find node =
         -- split items at Whitespace into list
         findAtoms =
             String.toLower find |> String.split " " |> List.filter (\e -> not <| String.isEmpty e)
-
-        matchNode : Node -> String -> Bool
-        matchNode n needle =
-            String.contains needle (String.toLower (n.name ++ " " ++ n.id))
     in
-        List.all (matchNode node) findAtoms
+        List.all (matchAll node) findAtoms
+
+
+matchAll : Node -> String -> Bool
+matchAll n needle =
+    (matchNode n needle) || (matchOwner n needle)
+
+
+matchOwner : Node -> String -> Bool
+matchOwner n needle =
+    List.any (\a -> True) <|
+        List.filter (\e -> String.contains needle e) <|
+            List.map String.toLower <|
+                List.concat [ n.projectmanager, n.responsiblemanager, n.teammember ]
+
+
+matchNode : Node -> String -> Bool
+matchNode n needle =
+    String.contains needle (String.toLower (n.name ++ " " ++ n.id))
