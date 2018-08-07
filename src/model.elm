@@ -1,4 +1,4 @@
-module Model exposing (State(..), Search, Year, Model, defaultModel)
+module Model exposing (State(..), Search, Year, Model, Display, defaultModel)
 
 import ModelBase exposing (Node)
 import Navigation exposing (..)
@@ -26,6 +26,12 @@ type alias Year =
     }
 
 
+type alias Display =
+    { types : List ( String, String )
+    , hide : List String
+    }
+
+
 type alias Model =
     { graph : Graph
     , location : Navigation.Location
@@ -35,6 +41,7 @@ type alias Model =
     , year : Year
     , state : State
     , search : Search
+    , display : Display
     , displayImage : Bool
     }
 
@@ -65,6 +72,16 @@ defaultModel location =
         , projects = []
         , highlight = 0
         , searchPrefix = ""
+        }
+    , display =
+        { types =
+            [ ( "SO", "SO" )
+            , ( "CSF", "CSF" )
+            , ( "NC", "NC" )
+            , ( "PRJ", "PRJ" )
+            , ( "all", "" )
+            ]
+        , hide = []
         }
     , displayImage = True
     }

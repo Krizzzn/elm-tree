@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import List exposing (..)
 import Graph exposing (..)
+import GraphExtra exposing (..)
 import SvgGraph exposing (..)
 import JsGraph exposing (..)
 import Navigation
@@ -52,6 +53,9 @@ update msg model =
 
         modelyear =
             model.year
+
+        display =
+            model.display
     in
         case msg of
             Msg.ChangeSelection newSelection ->
@@ -194,6 +198,19 @@ update msg model =
             Msg.HeroImageError ->
                 ( { model | displayImage = False }, Cmd.none )
 
+            Msg.ChangeDisplay disp ->
+                let
+                    hide =
+                        if (List.member disp display.hide) then
+                            List.filter (\a -> not (a == disp)) display.hide
+                        else
+                            List.append [ disp ] display.hide
+
+                    newmodel =
+                        { model | display = { display | hide = hide } }
+                in
+                    displayModel newmodel
+
             Msg.DoNothing ->
                 ( model, Cmd.none )
 
@@ -223,7 +240,7 @@ displayModel model =
         newModel =
             { model
                 | state = state
-                , currentPath = prepareView2 model currentPath
+                , currentPath = prepareViewRemoveLevel model currentPath
             }
     in
         case state of
@@ -234,8 +251,18 @@ displayModel model =
                 ( newModel, Cmd.none )
 
 
-prepareView2 : Model -> String -> Graph
-prepareView2 model currentPath =
+prepareViewRemoveLevel : Model -> String -> Graph
+prepareViewRemoveLevel model currentPath =
+    let
+        foldHideList : Graph -> Graph
+        foldHideList graph =
+            List.foldr GraphExtra.removeLevel graph model.display.hide
+    in
+        foldHideList <| prepareViewWayfinder model currentPath
+
+
+prepareViewWayfinder : Model -> String -> Graph
+prepareViewWayfinder model currentPath =
     let
         targets =
             List.filter (\e -> e.from == currentPath) model.graph.filter
@@ -244,13 +271,13 @@ prepareView2 model currentPath =
             Graph.filterGraphByIdsAndType model.graph <|
                 Wayfinder.ids targets <|
                     Wayfinder.traverseGraph targets <|
-                        prepareView model currentPath
+                        prepareViewFocus model currentPath
         else
-            prepareView model currentPath
+            prepareViewFocus model currentPath
 
 
-prepareView : Model -> String -> Graph
-prepareView model currentPath =
+prepareViewFocus : Model -> String -> Graph
+prepareViewFocus model currentPath =
     Graph.filterGraph currentPath model.graph
         |> Graph.highlightYear model.year.highlight
         |> if model.year.focus then

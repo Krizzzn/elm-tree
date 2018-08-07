@@ -22,3 +22,4 @@ type Msg
     | CurrentYear Date
     | FocusYear Bool
     | HeroImageError
+    | ChangeDisplay String

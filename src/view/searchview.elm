@@ -8,6 +8,7 @@ import Msg exposing (..)
 import Model exposing (State(..), Search, Year, Model)
 import ModelBase exposing (Node)
 import Graph exposing (..)
+import DisplayOptionsView exposing (render)
 
 
 limitSearchResult : Int
@@ -18,14 +19,15 @@ limitSearchResult =
 renderSearch : Model -> Html Msg
 renderSearch model =
     div [ id "search" ]
-        [ input [ onInput Msg.Search, value model.search.searchString, placeholder "filter" ] []
-        , renderChoices model.search.searchPrefix
+        [ DisplayOptionsView.render model
+        , input [ onInput Msg.Search, value model.search.searchString, placeholder "filter", type_ "text" ] []
+        , renderChoices model.search.searchPrefix model.display.types
         , renderSearchResult model.search
         ]
 
 
-renderChoices : String -> Html Msg
-renderChoices selected =
+renderChoices : String -> List ( String, String ) -> Html Msg
+renderChoices selected types =
     let
         selectedClass b =
             if selected == b then
@@ -36,12 +38,7 @@ renderChoices selected =
         div [ id "choice" ] <|
             List.map
                 (\( lbl, val ) -> a [ onClick (Msg.SearchPrefix val), class (selectedClass val) ] [ text lbl ])
-                [ ( "SO", "SO" )
-                , ( "CSF", "CSF" )
-                , ( "NC", "NC" )
-                , ( "PRJ", "PRJ" )
-                , ( "all", "" )
-                ]
+                types
 
 
 renderSearchResult : Search -> Html Msg
