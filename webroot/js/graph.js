@@ -1,5 +1,5 @@
-var Graph = function(tree) {
-
+var Graph = function(tree, haywire) {
+    haywire = haywire || false ;
   if (!document.getElementById('network'))
     return;
 
@@ -50,7 +50,7 @@ var Graph = function(tree) {
 
     node.font = { "color": colors.white };
     node.margin = 10;
-    node.fixed = {y: true};
+    node.fixed = {y: !haywire};
     node.chosen = {
       label: false,
       node:  function(values, id, selected, hovering) {
@@ -61,11 +61,11 @@ var Graph = function(tree) {
 
     switch (type){
       case "VISION":
-      node.mass = 1000;
+      node.mass = (haywire) ? 5 : 1000;
       node.color = colors.blue;
       node.x = 0;
       node.y = 0;
-      node.physics = false;
+      node.physics = !haywire;
       //node.shape = "box";
       break;
       case "SO":
@@ -89,14 +89,12 @@ var Graph = function(tree) {
     }
   }
 
+  var zoomable = true;
   var typeEx = /^[A-Z]+/;
 
   for (var i = tree.nodes.length - 1; i >= 0; i--) {
     var node = tree.nodes[i];
     node.label = "[" + node.id + "] " + node.name + progress(node.progress)
-
-//    if (node.description)
-//        node.label += "\n▶▶▶";
 
     var type = (typeEx.exec(node.id) || ["any"])[0];
     setNodeStyle(node, type);
@@ -122,12 +120,12 @@ var Graph = function(tree) {
     y: 3
   };
 
-  var zoomable = true;
+
 
   var options = {
     interaction: {
       selectable: zoomable,
-      dragNodes: false,
+      dragNodes: haywire,
       dragView: zoomable,
       zoomView: zoomable
     },
@@ -163,7 +161,7 @@ var Graph = function(tree) {
     },
     layout: {
       hierarchical: {
-        enabled: true,
+        enabled: !haywire,
         //nodeSpacing: 600,
         //nodeDistance: 600,
         levelSeparation:180,

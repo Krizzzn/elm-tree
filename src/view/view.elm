@@ -36,7 +36,7 @@ loadingAnimation model =
             Error ->
                 gif "error"
 
-            Ready ->
+            _ ->
                 text ""
 
 

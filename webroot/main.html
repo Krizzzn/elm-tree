@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>~/main.elm</title>
+        <title>Strategy Business Processes & IT</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="stylesheet" type="text/css" href="css/libs/vis-network.min.css">
         <link rel="stylesheet" type="text/css" href="css/app.css">
@@ -25,5 +25,6 @@ else
   app = runElmProgram();
 
 app.ports.tree.subscribe(Graph);
+app.ports.haywireMode.subscribe(function(tree) { Graph(tree, true) } );
 </script>
 </html>

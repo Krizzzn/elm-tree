@@ -9,6 +9,7 @@ type State
     = Loading
     | Error
     | Ready
+    | Haywire
 
 
 type alias Search =

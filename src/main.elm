@@ -126,6 +126,10 @@ update msg model =
                     ( 40, _, _ ) ->
                         ( { model | search = { search | highlight = (Basics.min limitSearchResult (search.highlight + 1)) } }, Cmd.none )
 
+                    ( 145, _, 1 ) ->
+                        -- list exactly one search result and press scroll lock key
+                        displayModel { model | state = Haywire }
+
                     ( _, _, _ ) ->
                         ( model, Cmd.none )
 
@@ -232,12 +236,18 @@ displayModel model =
 
         state : State
         state =
-            if model.state == Error then
-                Error
-            else if length model.graph.nodes == 0 || length model.graph.edges == 0 then
-                Loading
-            else
-                Ready
+            case ( model.state, length model.graph.nodes > 0 && length model.graph.edges > 0 ) of
+                ( Error, _ ) ->
+                    Error
+
+                ( Loading, False ) ->
+                    Loading
+
+                ( Loading, True ) ->
+                    Ready
+
+                ( state, _ ) ->
+                    state
 
         newModel =
             { model
@@ -248,6 +258,9 @@ displayModel model =
         case state of
             Ready ->
                 ( newModel, JsGraph.tree newModel.currentPath )
+
+            Haywire ->
+                ( newModel, JsGraph.haywireMode newModel.currentPath )
 
             _ ->
                 ( newModel, Cmd.none )
