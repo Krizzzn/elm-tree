@@ -7,6 +7,7 @@ import Html.Attributes as HAttr exposing (..)
 import Msg exposing (..)
 import Model exposing (Year, Model)
 import Config exposing (head)
+import DateArit exposing (..)
 
 
 renderYearPick : Year -> Html Msg
@@ -26,18 +27,28 @@ renderYearPick year =
             , ( focus, "focus" )
             , ( selectedYear + 1, "►" )
             ]
-                |> List.map (\( y, lbl ) -> ( y, lbl, (y > (year.current - 2) && y < (year.current + 4)) ))
+                |> List.map (\( y, lbl ) -> ( y, lbl, ((getYear y) > ((getYear year.current) - 2) && (getYear y) < ((getYear year.current) + 4)) ))
     in
         header []
             [ h1 []
                 [ text head
                 , text " - "
-                , text (toString selectedYear)
+                , text (renderYear selectedYear)
                 ]
             , div [ class "yearpick" ]
                 (renderButtons years)
             , div [ class "clearfix" ] []
             ]
+
+
+renderYear : Int -> String
+renderYear year =
+    case getQuarter year of
+        Just quarter ->
+            (getYear year |> toString) ++ " Q" ++ (toString quarter)
+
+        Nothing ->
+            year |> toString
 
 
 renderButtons : List ( Int, String, Bool ) -> List (Html Msg)

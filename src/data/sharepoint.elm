@@ -6,6 +6,7 @@ import Json.Decode as JD exposing (field, Decoder, int, string)
 import ModelBase exposing (Edge, Node)
 import Config exposing (Environment(..), local, currentEnvironment)
 import Regex exposing (split)
+import DateArit exposing (floatToInternalYear)
 
 
 type Query
@@ -93,7 +94,7 @@ decodeNode =
                 (JD.at [ "NodeId" ] string)
                 (JD.at [ "Name" ] string)
                 (JD.maybe <| JD.at [ "Longdescription" ] string)
-                (JD.maybe <| JD.at [ "FiscalYear" ] int)
+                (JD.maybe <| JD.at [ "FiscalYear" ] JD.int)
                 (JD.at [ "Progress" ] progress)
                 (JD.at [ "ProjectManager" ] people)
                 (JD.at [ "ResponsibleManager" ] people)
@@ -104,7 +105,7 @@ decodeNode =
                 (JD.at [ "NodeId" ] string)
                 (JD.at [ "Name" ] string)
                 (JD.maybe <| JD.at [ "Longdescription" ] string)
-                (JD.maybe <| JD.at [ "FiscalYear" ] int)
+                (JD.at [ "YearQuarter" ] year)
                 (JD.at [ "Name" ] progress)
                 (JD.at [ "Name" ] people)
                 (JD.at [ "Name" ] people)
@@ -137,6 +138,21 @@ progress =
             case raw of
                 Just value ->
                     JD.succeed <| Maybe.Just <| floor <| value * 100
+
+                Nothing ->
+                    JD.succeed Maybe.Nothing
+    in
+        JD.float |> JD.maybe |> JD.andThen convert
+
+
+year : Decoder (Maybe Int)
+year =
+    let
+        convert : Maybe Float -> Decoder (Maybe Int)
+        convert raw =
+            case raw of
+                Just value ->
+                    JD.succeed <| Maybe.Just <| DateArit.floatToInternalYear <| value
 
                 Nothing ->
                     JD.succeed Maybe.Nothing

@@ -9,14 +9,15 @@ import Navigation
 import Keyboard
 import Msg exposing (Msg)
 import Sharepoint
-import Date exposing (now, year)
+import Date exposing (now, year, month)
 import Task exposing (Task)
 import ModelBase exposing (..)
 import Model exposing (State(..), Search, Year, Model, defaultModel)
 import View exposing (view)
 import SearchView exposing (renderSearch, limitSearchResult, sortedNodes)
 import Wayfinder exposing (..)
-import Config exposing (rootNode)
+import Config exposing (Environment(..), currentEnvironment, rootNode)
+import DateArit exposing (dateToInternalYear)
 
 
 main =
@@ -191,7 +192,12 @@ update msg model =
             Msg.CurrentYear date ->
                 let
                     y =
-                        (Basics.min (year date + 1) 2019)
+                        case currentEnvironment of
+                            TOC ->
+                                date |> dateToInternalYear
+
+                            Strategy ->
+                                (Basics.min (year date + 1) 2019)
                 in
                     ( { model | year = { modelyear | current = y, highlight = Maybe.Just y } }, Cmd.none )
 
@@ -328,7 +334,6 @@ subscriptions model =
 
 
 -- VIEW
--- body
 
 
 getCurrentFocus : Graph -> String -> String
