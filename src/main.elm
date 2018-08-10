@@ -144,7 +144,7 @@ update msg model =
                         List.partition (\e -> e.edgetype == Maybe.Just "filter") edges
 
                     newmodel =
-                        { model | graph = { graph | edges = (Tuple.second parts), filter = (Tuple.first parts) } }
+                        { model | graph = { graph | edges = (Tuple.second parts), filter = (Tuple.first parts |> appendReversedEdges) } }
                 in
                     displayModel newmodel
 

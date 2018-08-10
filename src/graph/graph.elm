@@ -1,4 +1,4 @@
-module Graph exposing (Graph, highlightYear, filter, findNodeById, findNodesById, findNodesByString, filterGraph, filterGraphByIds, filterGraphByIdsAndType, idExists)
+module Graph exposing (Graph, highlightYear, filter, findNodeById, findNodesById, findNodesByString, filterGraph, filterGraphByIds, filterGraphByIdsAndType, idExists, appendReversedEdges)
 
 import ModelBase exposing (..)
 
@@ -38,13 +38,18 @@ highlightYear year graph =
 reverseGraph : Graph -> Graph
 reverseGraph graph =
     { nodes = graph.nodes
-    , edges = List.map reverseNode graph.edges
+    , edges = List.map reverseEdge graph.edges
     , filter = graph.filter
     }
 
 
-reverseNode : Edge -> Edge
-reverseNode edge =
+appendReversedEdges : List Edge -> List Edge
+appendReversedEdges edges =
+    List.concat <| List.map (\edge -> [ edge, reverseEdge edge ]) edges
+
+
+reverseEdge : Edge -> Edge
+reverseEdge edge =
     { from = edge.to
     , to = edge.from
     , edgetype = edge.edgetype

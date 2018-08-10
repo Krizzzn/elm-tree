@@ -15,7 +15,10 @@ floatToInternalYear year =
         decimal =
             ((floor (year * 10)) - ((floor year) * 10) - 1)
     in
-        internalYear + decimal
+        if decimal > 0 || decimal < 5 then
+            internalYear + decimal
+        else
+            internalYear
 
 
 dateToInternalYear : Date -> Int

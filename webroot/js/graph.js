@@ -61,6 +61,7 @@ var Graph = function(tree, haywire) {
 
     switch (type){
       case "VISION":
+      case "OC":
       node.mass = (haywire) ? 5 : 1000;
       node.color = colors.blue;
       node.x = 0;
