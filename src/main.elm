@@ -16,6 +16,7 @@ import Model exposing (State(..), Search, Year, Model, defaultModel)
 import View exposing (view)
 import SearchView exposing (renderSearch, limitSearchResult, sortedNodes)
 import Wayfinder exposing (..)
+import Config exposing (rootNode)
 
 
 main =
@@ -339,4 +340,4 @@ getCurrentFocus graph hash =
         if exists then
             hash
         else
-            "VISION"
+            rootNode

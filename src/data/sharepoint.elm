@@ -4,7 +4,7 @@ import Http
 import Msg exposing (Msg)
 import Json.Decode as JD exposing (field, Decoder, int, string)
 import ModelBase exposing (Edge, Node)
-import Config exposing (local)
+import Config exposing (Environment(..), local, currentEnvironment)
 import Regex exposing (split)
 
 
@@ -18,7 +18,17 @@ getEndpointUrl service =
     if local then
         "json/" ++ service ++ ".json"
     else
-        "/_vti_bin/listdata.svc/" ++ service
+        site ++ "_vti_bin/listdata.svc/" ++ service
+
+
+site : String
+site =
+    case currentEnvironment of
+        Strategy ->
+            ""
+
+        TOC ->
+            ""
 
 
 getImageUrl : String -> String
@@ -31,12 +41,18 @@ getImageUrl nodeId =
 
 getServiceUrl : Query -> String
 getServiceUrl q =
-    case q of
-        Edges ->
+    case ( q, currentEnvironment ) of
+        ( Edges, Strategy ) ->
             getEndpointUrl "VisionGraphEdges"
 
-        Nodes ->
+        ( Nodes, Strategy ) ->
             getEndpointUrl "VisionGraphNodes"
+
+        ( Edges, TOC ) ->
+            getEndpointUrl "TOCEdges"
+
+        ( Nodes, TOC ) ->
+            getEndpointUrl "TOCNodes"
 
 
 getJsonRequest : String -> Decoder a -> Http.Request a
@@ -71,15 +87,28 @@ getJsonData q =
 
 decodeNode : JD.Decoder Node
 decodeNode =
-    JD.map8 Node
-        (JD.at [ "NodeId" ] string)
-        (JD.at [ "Name" ] string)
-        (JD.maybe <| JD.at [ "Longdescription" ] string)
-        (JD.maybe <| JD.at [ "FiscalYear" ] int)
-        (JD.at [ "Progress" ] progress)
-        (JD.at [ "ProjectManager" ] people)
-        (JD.at [ "ResponsibleManager" ] people)
-        (JD.at [ "TeamMember" ] people)
+    case currentEnvironment of
+        Strategy ->
+            JD.map8 Node
+                (JD.at [ "NodeId" ] string)
+                (JD.at [ "Name" ] string)
+                (JD.maybe <| JD.at [ "Longdescription" ] string)
+                (JD.maybe <| JD.at [ "FiscalYear" ] int)
+                (JD.at [ "Progress" ] progress)
+                (JD.at [ "ProjectManager" ] people)
+                (JD.at [ "ResponsibleManager" ] people)
+                (JD.at [ "TeamMember" ] people)
+
+        TOC ->
+            JD.map8 Node
+                (JD.at [ "NodeId" ] string)
+                (JD.at [ "Name" ] string)
+                (JD.maybe <| JD.at [ "Longdescription" ] string)
+                (JD.maybe <| JD.at [ "FiscalYear" ] int)
+                (JD.at [ "Name" ] progress)
+                (JD.at [ "Name" ] people)
+                (JD.at [ "Name" ] people)
+                (JD.at [ "Name" ] people)
 
 
 people : Decoder (List String)

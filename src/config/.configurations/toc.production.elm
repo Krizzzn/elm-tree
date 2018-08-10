@@ -8,19 +8,19 @@ type Environment
 
 currentEnvironment : Environment
 currentEnvironment =
-    Strategy
+    TOC
 
 
 local : Bool
 local =
-    True
+    False
 
 
 rootNode : String
 rootNode =
-    "VISION"
+    "TEST1"
 
 
 head : String
 head =
-    "Strategy"
+    "Road"

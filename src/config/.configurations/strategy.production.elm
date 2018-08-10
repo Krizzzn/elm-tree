@@ -13,7 +13,7 @@ currentEnvironment =
 
 local : Bool
 local =
-    True
+    False
 
 
 rootNode : String

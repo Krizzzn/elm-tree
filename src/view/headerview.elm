@@ -6,6 +6,7 @@ import Html.Events as HEvent exposing (..)
 import Html.Attributes as HAttr exposing (..)
 import Msg exposing (..)
 import Model exposing (Year, Model)
+import Config exposing (head)
 
 
 renderYearPick : Year -> Html Msg
@@ -29,7 +30,7 @@ renderYearPick year =
     in
         header []
             [ h1 []
-                [ text "Strategy"
+                [ text head
                 , text " - "
                 , text (toString selectedYear)
                 ]
